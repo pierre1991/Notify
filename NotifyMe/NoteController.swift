@@ -9,7 +9,7 @@
 import Foundation
 
 class NoteController {
-    
+    /*
     static let sharedController = NoteController()
     
     static func createNote(title: String, text: String?, identifier: String, users: [User], completion: (_ success: Bool, _ note: Note?) -> Void) {
@@ -21,4 +21,5 @@ class NoteController {
             
         }
     }
+ */
 }

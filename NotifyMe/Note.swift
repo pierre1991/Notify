@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Note {
+class Note: FirebaseType {
     
     private let kTitle = "title"
     private let kText = "text"
@@ -24,7 +24,7 @@ class Note {
     }
     
     var jsonValue: [String : AnyObject] {
-        return [kTitle : title as AnyObject, kText : text as AnyObject, kUids : users.map({$0.identifier!})]
+        return [kTitle : title as AnyObject, kText : text as AnyObject, kUids : users.map({$0.identifier}) as AnyObject]
     }
     
     init(title: String, text: String, identifier: String? = nil, users: [User]) {
@@ -33,10 +33,10 @@ class Note {
         self.users = users
     }
     
-    init?(jsonValue: [String:AnyObject], identifier: String) {
-        guard let title = jsonValue[kTitle] as? String else {return nil}
-        guard let text = jsonValue[kText] as? String else {return nil}
-        guard let userIds = jsonValue[kUids] as? [String] else {return nil}
+    required init?(json: [String:AnyObject], identifier: String) {
+        guard let title = json[kTitle] as? String else {return nil}
+        guard let text = json[kText] as? String else {return nil}
+        guard let userIds = json[kUids] as? [String] else {return nil}
         
         self.title = title
         self.text = text

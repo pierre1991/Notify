@@ -35,7 +35,7 @@ protocol FirebaseType {
     
     init?(json: [String : AnyObject], identifier: String)
     
-    func save()
+    mutating func save()
     func delete()
 }
 

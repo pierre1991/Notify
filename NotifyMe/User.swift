@@ -8,13 +8,12 @@
 
 import Foundation
 
-class User: FirebaseType, Equatable {
+class User: FirebaseType {
     
     private let kEmail = "email"
     private let kImageEndpoint = "imageEndpoint"
     private let kNoteId = "noteId"
     
-    var username: String
     var email: String
     var imageEndpoint: String?
     var notes: [Note] = []
@@ -39,17 +38,16 @@ class User: FirebaseType, Equatable {
     }
     
     //Init
-    init(username: String, email: String, imageEndpoint: String? = nil, identifier: String) {
-        self.username = username
+    init(email: String, imageEndpoint: String? = nil, identifier: String) {
         self.email = email
         self.imageEndpoint = imageEndpoint
         self.identifier = identifier
     }
     
     required init?(json: [String:AnyObject], identifier: String) {
-        guard let email = jsonValue[kEmail] as? String else {return nil}
-        guard let imageEndpoint = jsonValue[kImageEndpoint] as? String else {return nil}
-        guard let noteId = jsonValue[kNoteId] as? [String] else {return nil}
+        guard let email = json[kEmail] as? String else {return nil}
+        guard let imageEndpoint = json[kImageEndpoint] as? String else {return nil}
+        guard let noteId = json[kNoteId] as? [String] else {return nil}
         
         self.email = email
         self.imageEndpoint = imageEndpoint
@@ -57,8 +55,4 @@ class User: FirebaseType, Equatable {
         self.identifier = identifier
     }
     
-}
-
-func ==(lhs: User, rhs: User) -> Bool {
-    return lhs.username == rhs.username && lhs.identifier == rhs.identifier
 }
