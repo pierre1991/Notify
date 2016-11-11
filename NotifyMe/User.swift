@@ -41,14 +41,19 @@ struct User: Equatable, FirebaseType {
     }
     
     init?(json jsonValue: [String:AnyObject], identifier: String) {
-        guard let email = jsonValue[kEmail] as? String else {return nil}
-        guard let imageEndpoint = jsonValue[kImageEndpoint] as? String else {return nil}
-        guard let noteId = jsonValue[kNoteId] as? [String] else {return nil}
-        
+        guard let email = jsonValue[kEmail] as? String,
+            let imageEndpoint = jsonValue[kImageEndpoint] as? String else {
+                self.email = ""
+                self.imageEndpoint = ""
+                return nil
+        }
         self.email = email
         self.imageEndpoint = imageEndpoint
-        self.noteId = noteId
         self.identifier = identifier
+        
+        if let noteIds = jsonValue[kNoteId] as? [String] {
+            self.noteId = noteIds
+        }
     }
     
 }

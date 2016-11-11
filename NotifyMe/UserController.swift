@@ -16,7 +16,6 @@ class UserController {
     static let currentUser = FIRAuth.auth()?.currentUser?.uid
     
     
-    
     static func createUser(email: String, password: String, imageEndpoint: String? = nil, completion: @escaping (_ success: Bool, _ user: User?) -> Void) {
         FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user, error) in
             if error == nil {
@@ -37,7 +36,7 @@ class UserController {
     static func authenticateUser(email: String, password: String, completion: @escaping (_ success: Bool) -> Void) {
         FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
             if error == nil {
-                
+                completion(true)
             } else {
                 print("unalbe to sign in")
                 completion(false)
@@ -46,16 +45,11 @@ class UserController {
     }
     
     
-    
     static func fetchAllUsers(completion: @escaping (_ user: [User]) -> Void) {
         FirebaseController.dataAtEndpoint(endpoint: "users") { (data) in
-            print(data)
-            
-            if let json = data as? [String:AnyObject] {
-                let users = json.flatMap({User(json: $0.1 as! [String:AnyObject], identifier: $0.0)})
-
+            if let data = data as? [String:AnyObject] {
+                let users = data.flatMap({User(json: $0.1 as! [String:AnyObject], identifier: $0.0)})
                 completion(users)
-                print(users)
             } else {
                 completion([])
             }
