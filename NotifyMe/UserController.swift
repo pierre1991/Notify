@@ -13,6 +13,8 @@ class UserController {
     
     static let sharedController = UserController()
 
+    static let currentUser = FIRAuth.auth()?.currentUser?.uid
+    
     
     
     static func createUser(email: String, password: String, imageEndpoint: String? = nil, completion: @escaping (_ success: Bool, _ user: User?) -> Void) {
@@ -22,6 +24,8 @@ class UserController {
                 
                 var user = User(email: email, imageEndpoint: imageEndpoint, identifier: identifier)
                 user.save()
+                
+                completion(true, user)
             } else {
                 print("unable to create user")
                 completion(false, nil)
@@ -45,17 +49,18 @@ class UserController {
     
     static func fetchAllUsers(completion: @escaping (_ user: [User]) -> Void) {
         FirebaseController.dataAtEndpoint(endpoint: "users") { (data) in
+            print(data)
+            
             if let json = data as? [String:AnyObject] {
                 let users = json.flatMap({User(json: $0.1 as! [String:AnyObject], identifier: $0.0)})
+
                 completion(users)
+                print(users)
             } else {
                 completion([])
             }
         }
     }
-    
-
-    
     
     
 }

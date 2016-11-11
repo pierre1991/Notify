@@ -8,7 +8,7 @@
 
 import Foundation
 
-class User: FirebaseType {
+struct User: Equatable, FirebaseType {
     
     private let kEmail = "email"
     private let kImageEndpoint = "imageEndpoint"
@@ -17,11 +17,7 @@ class User: FirebaseType {
     var email: String
     var imageEndpoint: String?
     var notes: [Note] = []
-    var noteId: [String] = [] {
-        didSet {
-            
-        }
-    }
+    var noteId: [String] = [] 
     var identifier: String?
     var endpoint: String {
         return "users"
@@ -44,10 +40,10 @@ class User: FirebaseType {
         self.identifier = identifier
     }
     
-    required init?(json: [String:AnyObject], identifier: String) {
-        guard let email = json[kEmail] as? String else {return nil}
-        guard let imageEndpoint = json[kImageEndpoint] as? String else {return nil}
-        guard let noteId = json[kNoteId] as? [String] else {return nil}
+    init?(json jsonValue: [String:AnyObject], identifier: String) {
+        guard let email = jsonValue[kEmail] as? String else {return nil}
+        guard let imageEndpoint = jsonValue[kImageEndpoint] as? String else {return nil}
+        guard let noteId = jsonValue[kNoteId] as? [String] else {return nil}
         
         self.email = email
         self.imageEndpoint = imageEndpoint
@@ -55,4 +51,8 @@ class User: FirebaseType {
         self.identifier = identifier
     }
     
+}
+
+func ==(lhs: User, rhs: User) -> Bool {
+    return (lhs.email == rhs.email) && (lhs.identifier == rhs.identifier)
 }
