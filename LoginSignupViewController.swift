@@ -16,8 +16,8 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
     
     var keyboardHeight: CGFloat!
     
-    var signupViewsHidden: Bool = false
-    var loginViewsHidden: Bool = true
+    var signupStateShowing = true
+    var loginStateShowing = false
     
     
     //MARK: IBOutlets
@@ -28,12 +28,6 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
     @IBOutlet weak var signUpPasswordTextField: UITextField!
     
     @IBOutlet weak var signUpButton: UIButton!
-    
-    @IBOutlet weak var loginStackView: UIStackView!
-    @IBOutlet weak var loginEmailTextField: UITextField!
-    @IBOutlet weak var loginPasswordTextField: UITextField!
-    
-    @IBOutlet weak var loginButton: UIButton!
     
     @IBOutlet weak var accountActionLabel: UILabel!
     @IBOutlet weak var accountActionButton: UIButton!
@@ -46,7 +40,7 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardNotification), name: Notification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardNotification), name: Notification.Name.UIKeyboardWillHide, object: nil)
         
-        moveOutLoginViews()
+        //moveOutLoginViews()
         
         profileImageTap()
     }
@@ -56,42 +50,65 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
     @IBAction func signUpButtonTapped(_ sender: Any) {
         guard let email = signUpEmailTextField.text, let password = signUpPasswordTextField.text else {return}
         
-        if let profileImage = profileImage {
-            ImageController.uploadImage(image: profileImage, completion: { (identifier) in
-                guard let identifier = identifier else {return}
-                
-                UserController.createUser(email: email, password: password, imageEndpoint: identifier, completion: { (success, user) in
-                    if success, let _ = user {
-                        self.signUpEmailTextField.resignFirstResponder()
-                        self.signUpPasswordTextField.resignFirstResponder()
-                        
-                        self.dismiss(animated: true, completion: nil)
-                    } else {
-                        self.presentMessageViewController(title: "Oops", message: "something went wrong")
-                    }
+        if signUpButton.currentTitle == "Sign up!" {
+            if let profileImage = profileImage {
+                ImageController.uploadImage(image: profileImage, completion: { (identifier) in
+                    guard let identifier = identifier else {return}
+                    
+                    UserController.createUser(email: email, password: password, imageEndpoint: identifier, completion: { (success, user) in
+                        if success, let _ = user {
+                            self.signUpEmailTextField.resignFirstResponder()
+                            self.signUpPasswordTextField.resignFirstResponder()
+                            
+                            self.dismiss(animated: true, completion: nil)
+                        } else {
+                            self.presentMessageViewController(title: "Oops", message: "something went wrong")
+                        }
+                    })
                 })
+            } else {
+                presentMessageViewController(title: "OOOOOPS", message: "OOOOOPS")
+            }
+        } else if signUpButton.currentTitle == "Log in!" {
+            UserController.authenticateUser(email: email, password: password, completion: { (success) in
+                if success {
+                    self.dismiss(animated: true, completion: nil)
+                } else {
+                    self.presentMessageViewController(title: "Oops", message: "couldn't authenticate user")
+                }
             })
-        } else {
-            presentMessageViewController(title: "OOOOOPS", message: "OOOOOPS")
         }
     }
     
     
     @IBAction func accountActionButtonTapped(_ sender: Any) {
         if accountActionButton.currentTitle == "Log in!" {
-            signupViewsHidden = true
+
+            signupStateShowing = false
+            loginStateShowing = true
             
             alreadyHaveAccountDescription()
             
-        	moveInLoginViews()
-            moveOutSignupViews()
+        	//moveInLoginViews()
+            //moveOutSignupViews()
+            
+            UIView.animate(withDuration: 0.6, animations: { 
+                self.profileImageView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, -self.view.frame.width, 0, 0)
+                self.signUpButton.setTitle("Log in!", for: .normal)
+            })
             
         } else if accountActionButton.currentTitle == "Sign up!" {
-            loginViewsHidden = true
+    		signupStateShowing = true
+            loginStateShowing = false
+            
+            UIView.animate(withDuration: 0.6, animations: {
+                self.profileImageView.layer.transform = CATransform3DIdentity
+                self.signUpButton.setTitle("Sign up!", for: .normal)
+            })
             
             needAnAccountDescription()
             
-            moveOutLoginViews()
+            //moveOutLoginViews()
             moveInSignupViews()
         }
     }
@@ -117,6 +134,7 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
         })
     }
     
+    /*
     func moveInLoginViews() {
         UIView.animate(withDuration: 0.8, animations: {
             self.loginEmailTextField.layer.transform = CATransform3DIdentity
@@ -125,7 +143,6 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
         })
     }
     
-    
     func moveOutLoginViews() {
         UIView.animate(withDuration: 0.8, animations: {
             self.loginEmailTextField.layer.transform = CATransform3DTranslate(CATransform3DIdentity, +self.view.frame.width, 0, 0)
@@ -133,6 +150,7 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
             self.loginButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, +self.view.frame.width, 0, 0)
         })
     }
+ 	*/
     
 
     func alreadyHaveAccountDescription() {
@@ -168,9 +186,6 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         signUpEmailTextField.resignFirstResponder()
         signUpPasswordTextField.resignFirstResponder()
-        
-        loginEmailTextField.resignFirstResponder()
-        loginPasswordTextField.resignFirstResponder()
     }
     
     
@@ -234,25 +249,33 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
         let isKeyboardShowing = notification.name == NSNotification.Name.UIKeyboardWillShow
         
         if isKeyboardShowing {
-            if !loginViewsHidden {
+            if signupStateShowing == true {
                 UIView.animate(withDuration: 0.8, animations: {
                     self.profileImageView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -((UIScreen.main.bounds.height - self.keyboardHeight) / 4) - (self.profileImageView.frame.height / 2), 0)
                     self.signUpEmailTextField.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -((UIScreen.main.bounds.height - self.keyboardHeight) / 3) - (self.signUpEmailTextField.frame.height / 2), 0)
                     self.signUpPasswordTextField.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -((UIScreen.main.bounds.height - self.keyboardHeight) / 3) - (self.signUpPasswordTextField.frame.height / 2), 0)
                     self.signUpButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -((UIScreen.main.bounds.height - self.keyboardHeight) / 3) - (self.signUpButton.frame.height / 2), 0)
                 })
-            } else if !signupViewsHidden {
-                self.loginEmailTextField.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -((UIScreen.main.bounds.height - self.keyboardHeight) / 3) - (self.loginEmailTextField.frame.height / 2), 0)
-                self.loginPasswordTextField.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -((UIScreen.main.bounds.height - self.keyboardHeight) / 3) - (self.loginPasswordTextField.frame.height / 2), 0)
-                self.loginButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -((UIScreen.main.bounds.height - self.keyboardHeight) / 3) - (self.loginButton.frame.height / 2), 0)
+            } else if loginStateShowing == true {
+                UIView.animate(withDuration: 0.8, animations: {
+                    self.signUpEmailTextField.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -((UIScreen.main.bounds.height - self.keyboardHeight) / 3) - (self.signUpEmailTextField.frame.height / 2), 0)
+                    self.signUpPasswordTextField.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -((UIScreen.main.bounds.height - self.keyboardHeight) / 3) - (self.signUpPasswordTextField.frame.height / 2), 0)
+                    self.signUpButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -((UIScreen.main.bounds.height - self.keyboardHeight) / 3) - (self.signUpButton.frame.height / 2), 0)
+                })
             }
         } else {
-            UIView.animate(withDuration: 0.8, animations: {
+            if signupStateShowing == true {
                 self.profileImageView.layer.transform = CATransform3DIdentity
                 self.signUpEmailTextField.layer.transform = CATransform3DIdentity
                 self.signUpPasswordTextField.layer.transform = CATransform3DIdentity
                 self.signUpButton.layer.transform = CATransform3DIdentity
-            })
+            } else if loginStateShowing == true {
+                UIView.animate(withDuration: 0.8, animations: {
+                    self.signUpEmailTextField.layer.transform = CATransform3DIdentity
+                    self.signUpPasswordTextField.layer.transform = CATransform3DIdentity
+                    self.signUpButton.layer.transform = CATransform3DIdentity
+                })
+            }
         }
     }
 
@@ -261,10 +284,7 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         signUpEmailTextField.resignFirstResponder()
         signUpPasswordTextField.resignFirstResponder()
-        
-        loginEmailTextField.resignFirstResponder()
-        loginPasswordTextField.resignFirstResponder()
-        
+
         return true
     }
     
