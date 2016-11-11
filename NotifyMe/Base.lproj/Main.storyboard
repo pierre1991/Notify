@@ -43,38 +43,6 @@
                                     <action selector="accountActionButtonTapped:" destination="LyO-fn-tbe" eventType="touchUpInside" id="GwQ-JJ-9gj"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rSI-j5-4L3">
-                                <rect key="frame" x="123" y="390" width="74" height="40"/>
-                                <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="20"/>
-                                <state key="normal" title="Sign up!">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="signUpButtonTapped:" destination="LyO-fn-tbe" eventType="touchUpInside" id="8K5-fm-ka9"/>
-                                </connections>
-                            </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Cr1-lV-QCa">
-                                <rect key="frame" x="50" y="248" width="220" height="30"/>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7hL-0n-iOa">
-                                <rect key="frame" x="50" y="286" width="220" height="30"/>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wux-Sh-jld">
-                                <rect key="frame" x="129" y="332" width="62" height="40"/>
-                                <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="20"/>
-                                <state key="normal" title="Log in!">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="signUpButtonTapped:" destination="LyO-fn-tbe" eventType="touchUpInside" id="WbR-ts-vWw"/>
-                                </connections>
-                            </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_pic" translatesAutoresizingMaskIntoConstraints="NO" id="zVo-hK-S2J" customClass="CircularImageView" customModule="NotifyMe" customModuleProvider="target">
                                 <rect key="frame" x="100" y="178" width="120" height="120"/>
                                 <constraints>
@@ -100,31 +68,33 @@
                                     <outlet property="delegate" destination="LyO-fn-tbe" id="sIN-bZ-WzM"/>
                                 </connections>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rSI-j5-4L3">
+                                <rect key="frame" x="123" y="390" width="74" height="40"/>
+                                <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="20"/>
+                                <state key="normal" title="Sign up!">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="signUpButtonTapped:" destination="LyO-fn-tbe" eventType="touchUpInside" id="8K5-fm-ka9"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.80783659196162594" green="0.58567816729741529" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="Cr1-lV-QCa" firstAttribute="top" secondItem="VZ0-p4-SO4" secondAttribute="bottom" constant="165" id="2vt-VR-gsn"/>
                             <constraint firstItem="zVo-hK-S2J" firstAttribute="top" secondItem="VZ0-p4-SO4" secondAttribute="bottom" constant="95" id="4Nx-pu-fqo"/>
-                            <constraint firstItem="7hL-0n-iOa" firstAttribute="top" secondItem="Cr1-lV-QCa" secondAttribute="bottom" constant="8" id="4gJ-ge-zjp"/>
-                            <constraint firstItem="Cr1-lV-QCa" firstAttribute="centerX" secondItem="2S1-lD-5VM" secondAttribute="centerX" id="8Wk-E2-gCa"/>
                             <constraint firstItem="VZ0-p4-SO4" firstAttribute="centerX" secondItem="2S1-lD-5VM" secondAttribute="centerX" id="9pj-LW-MCJ"/>
-                            <constraint firstItem="wux-Sh-jld" firstAttribute="centerX" secondItem="2S1-lD-5VM" secondAttribute="centerX" id="B2m-XX-y5n"/>
                             <constraint firstItem="Q7a-wd-hJk" firstAttribute="top" secondItem="zVo-hK-S2J" secondAttribute="bottom" constant="8" id="DGQ-K9-fLW"/>
                             <constraint firstItem="rSI-j5-4L3" firstAttribute="top" secondItem="XEv-eC-Led" secondAttribute="bottom" constant="16" id="FWa-Lq-k78"/>
-                            <constraint firstItem="7hL-0n-iOa" firstAttribute="centerX" secondItem="2S1-lD-5VM" secondAttribute="centerX" id="HA5-9l-8KV"/>
                             <constraint firstItem="40h-1f-nn7" firstAttribute="top" secondItem="Crb-6j-GNd" secondAttribute="bottom" constant="20" id="IdK-cl-ccR"/>
-                            <constraint firstItem="Cr1-lV-QCa" firstAttribute="leading" secondItem="2S1-lD-5VM" secondAttribute="leading" constant="50" id="SaT-x3-vD4"/>
                             <constraint firstItem="XEv-eC-Led" firstAttribute="leading" secondItem="2S1-lD-5VM" secondAttribute="leading" constant="50" id="UAQ-nq-kD3"/>
                             <constraint firstItem="XEv-eC-Led" firstAttribute="top" secondItem="Q7a-wd-hJk" secondAttribute="bottom" constant="8" id="UOS-KX-8Y5"/>
                             <constraint firstItem="XEv-eC-Led" firstAttribute="centerX" secondItem="2S1-lD-5VM" secondAttribute="centerX" id="ZUK-u1-GDI"/>
                             <constraint firstAttribute="trailing" secondItem="4CU-ei-5L6" secondAttribute="trailing" constant="16" id="axY-9k-Eb7"/>
-                            <constraint firstItem="7hL-0n-iOa" firstAttribute="leading" secondItem="2S1-lD-5VM" secondAttribute="leading" constant="50" id="bFu-87-aY8"/>
                             <constraint firstItem="rSI-j5-4L3" firstAttribute="centerX" secondItem="2S1-lD-5VM" secondAttribute="centerX" id="cB4-RP-iWi"/>
                             <constraint firstItem="Q7a-wd-hJk" firstAttribute="leading" secondItem="2S1-lD-5VM" secondAttribute="leading" constant="50" id="d1j-kZ-YFN"/>
                             <constraint firstItem="zVo-hK-S2J" firstAttribute="centerX" secondItem="2S1-lD-5VM" secondAttribute="centerX" id="eUY-Vp-w19"/>
                             <constraint firstItem="VZ0-p4-SO4" firstAttribute="top" secondItem="4TA-32-1Nd" secondAttribute="bottom" constant="20" id="kVf-of-AsW"/>
                             <constraint firstItem="4CU-ei-5L6" firstAttribute="centerY" secondItem="Crb-6j-GNd" secondAttribute="centerY" id="w5V-EE-OPq"/>
-                            <constraint firstItem="wux-Sh-jld" firstAttribute="top" secondItem="7hL-0n-iOa" secondAttribute="bottom" constant="16" id="weU-x1-vFm"/>
                             <constraint firstItem="Q7a-wd-hJk" firstAttribute="centerX" secondItem="2S1-lD-5VM" secondAttribute="centerX" id="zQH-K7-7Rj"/>
                             <constraint firstItem="Crb-6j-GNd" firstAttribute="leading" secondItem="2S1-lD-5VM" secondAttribute="leading" constant="16" id="zgP-pP-pkC"/>
                         </constraints>
@@ -134,9 +104,6 @@
                     <connections>
                         <outlet property="accountActionButton" destination="4CU-ei-5L6" id="2cC-Xk-74J"/>
                         <outlet property="accountActionLabel" destination="Crb-6j-GNd" id="gel-AV-7PK"/>
-                        <outlet property="loginButton" destination="wux-Sh-jld" id="Poy-gC-OtG"/>
-                        <outlet property="loginEmailTextField" destination="Cr1-lV-QCa" id="8YQ-ge-Mn3"/>
-                        <outlet property="loginPasswordTextField" destination="7hL-0n-iOa" id="seb-9f-Fqw"/>
                         <outlet property="profileImageView" destination="zVo-hK-S2J" id="PQE-bb-kMv"/>
                         <outlet property="signUpButton" destination="rSI-j5-4L3" id="DAx-cg-DCe"/>
                         <outlet property="signUpEmailTextField" destination="Q7a-wd-hJk" id="I36-6s-aNU"/>
@@ -199,13 +166,13 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="l5C-l3-CBi">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="l5C-l3-CBi">
                                 <rect key="frame" x="16" y="86" width="288" height="60"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="Kvh-f0-g5y"/>
                                 </constraints>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="C0k-AZ-c0K">
+                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="C0k-AZ-c0K">
                                     <size key="itemSize" width="60" height="60"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
