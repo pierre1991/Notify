@@ -12,6 +12,8 @@ class NoteTableViewCell: UITableViewCell {
 
     
     //MARK: IBOulets
+    @IBOutlet weak var noteTitleLabel: UILabel!
+    @IBOutlet weak var noteBodyLabel: UILabel!
     
     
     
@@ -22,5 +24,16 @@ class NoteTableViewCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
+    
+    
+    func updateNote(note: Note) {
+        noteTitleLabel.text = note.title
+        noteBodyLabel.text = note.text
+    }
 
+}
+
+extension NoteTableViewCell {
+    
+    
 }
