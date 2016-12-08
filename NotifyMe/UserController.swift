@@ -11,9 +11,42 @@ import Firebase
 
 class UserController {
     
+    fileprivate let kUser = "userKey"
+    
     static let sharedController = UserController()
 
-    static let currentUser = FIRAuth.auth()?.currentUser?.uid
+    
+    var currentUser: User! {
+        get {
+            guard let uid = FIRAuth.auth()?.currentUser?.uid,
+            	let userDefaultsValue = UserDefaults.standard.value(forKey: kUser),
+                let userDictionary = userDefaultsValue as? [String:AnyObject] else {return nil}
+            
+            return User(json: userDictionary, identifier: uid)
+        } set {
+            if let newValue = newValue {
+                UserDefaults.standard.setValue(newValue.jsonValue, forKey: kUser)
+                UserDefaults.standard.synchronize()
+            } else {
+                UserDefaults.standard.removeObject(forKey: kUser)
+                UserDefaults.standard.synchronize()
+            }
+        }
+    }
+    
+
+    
+    
+    static func userForIdentifier(identifier: String, completion: @escaping (_ user: User?) -> Void) {
+        FirebaseController.dataAtEndpoint(endpoint: "users\(identifier)", completion: {(data) -> Void in
+            if let json = data as? [String:AnyObject] {
+                let user = User(json: json, identifier: identifier)
+                completion(user)
+            } else {
+                completion(nil)
+            }
+        })
+    }
     
     
     static func createUser(email: String, password: String, imageEndpoint: String? = nil, completion: @escaping (_ success: Bool, _ user: User?) -> Void) {
@@ -45,7 +78,7 @@ class UserController {
     }
     
     
-    static func fetchAllUsers(completion: @escaping (_ user: [User]) -> Void) {
+    static func fetchAllUsers(completion: @escaping (_ user: [User]?) -> Void) {
         FirebaseController.dataAtEndpoint(endpoint: "users") { (data) in
             if let data = data as? [String:AnyObject] {
                 let users = data.flatMap({User(json: $0.1 as! [String:AnyObject], identifier: $0.0)})
@@ -56,5 +89,6 @@ class UserController {
         }
     }
     
+
     
 }
