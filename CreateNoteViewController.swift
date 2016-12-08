@@ -29,9 +29,10 @@ class CreateNoteViewController: UIViewController {
         super.viewDidLoad()
         
         UserController.fetchAllUsers { (user) in
-            print(user)
-            self.allUsers = user
-        	
+            guard let user = user else {return}
+            
+            self.allUsers = user.filter({$0.identifier != UserController.sharedController.currentUser.identifier})
+            
             DispatchQueue.main.async {
 				self.userCollectionView.reloadData()
             }
