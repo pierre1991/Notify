@@ -21,6 +21,9 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
     
     
     //MARK: IBOutlets
+    @IBOutlet weak var notifyMeLabel: UILabel!
+    
+    
     @IBOutlet weak var profileImageView: UIImageView!
     
 	@IBOutlet weak var signUpStackView: UIStackView!
@@ -46,9 +49,15 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     
+    //MARK: Status Bar
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
+    
     //MARK: IBActions
     @IBAction func signUpButtonTapped(_ sender: Any) {
-        guard let email = signUpEmailTextField.text, let password = signUpPasswordTextField.text else {return}
+        guard let email = signUpEmailTextField.text, isValidEmail(email: email), let password = signUpPasswordTextField.text else {return}
         
         if signUpButton.currentTitle == "Sign up!" {
             if let profileImage = profileImage {
@@ -96,8 +105,7 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
                 self.profileImageView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, -self.view.frame.width, 0, 0)
                 self.signUpButton.setTitle("Log in!", for: .normal)
             })
-            
-        } else if accountActionButton.currentTitle == "Sign up!" {
+		} else if accountActionButton.currentTitle == "Sign up!" {
     		signupStateShowing = true
             loginStateShowing = false
             
@@ -251,6 +259,7 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
         if isKeyboardShowing {
             if signupStateShowing == true {
                 UIView.animate(withDuration: 0.8, animations: {
+                    self.notifyMeLabel.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -self.view.frame.height, 0)
                     self.profileImageView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -((UIScreen.main.bounds.height - self.keyboardHeight) / 4) - (self.profileImageView.frame.height / 2), 0)
                     self.signUpEmailTextField.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -((UIScreen.main.bounds.height - self.keyboardHeight) / 3) - (self.signUpEmailTextField.frame.height / 2), 0)
                     self.signUpPasswordTextField.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -((UIScreen.main.bounds.height - self.keyboardHeight) / 3) - (self.signUpPasswordTextField.frame.height / 2), 0)
@@ -265,6 +274,7 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
             }
         } else {
             if signupStateShowing == true {
+                self.notifyMeLabel.layer.transform = CATransform3DIdentity
                 self.profileImageView.layer.transform = CATransform3DIdentity
                 self.signUpEmailTextField.layer.transform = CATransform3DIdentity
                 self.signUpPasswordTextField.layer.transform = CATransform3DIdentity
@@ -288,5 +298,14 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
         return true
     }
     
+    
+    //MARK: Email Validity
+    func isValidEmail(email: String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+        
+        let emailTest = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
+        
+        return emailTest.evaluate(with: email)
+    }
     
 }
