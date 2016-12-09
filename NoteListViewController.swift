@@ -18,7 +18,9 @@ class NoteListViewController: UIViewController {
     //MARK: IBOutlets
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var noNotesView: UIView!
 	
+    
     //MARK: View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,10 +29,15 @@ class NoteListViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        
+        
+        
+        if FIRAuth.auth()?.currentUser == nil {
+            performSegue(withIdentifier: "toSignupLoginView", sender: self)
+        }
+        
         if let currentUser = UserController.sharedController.currentUser {
         	loadNotesForUser(user: currentUser)
-        } else {
-            performSegue(withIdentifier: "toSignupLoginView", sender: self)
         }
     }
     
@@ -56,11 +63,22 @@ class NoteListViewController: UIViewController {
 extension NoteListViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if notes.count == 0 {
+            noNotesView.isHidden = false
+        } else if notes.count > 0 {
+            noNotesView.isHidden = true
+        }
+        
         return notes.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        <#code#>
+        let cell = tableView.dequeueReusableCell(withIdentifier: "noteCell", for: indexPath) as! NoteTableViewCell
+        let note = notes[indexPath.row]
+        
+        cell.updateNote(note: note)
+        
+        return cell
     }
     
 }
