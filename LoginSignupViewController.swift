@@ -23,7 +23,6 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
     //MARK: IBOutlets
     @IBOutlet weak var notifyMeLabel: UILabel!
     
-    
     @IBOutlet weak var profileImageView: UIImageView!
     
 	@IBOutlet weak var signUpStackView: UIStackView!
@@ -52,6 +51,13 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
     //MARK: Status Bar
     override var prefersStatusBarHidden: Bool {
         return true
+    }
+    
+    
+    //MARK: Touches
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        signUpEmailTextField.resignFirstResponder()
+        signUpPasswordTextField.resignFirstResponder()
     }
     
     
@@ -190,11 +196,7 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     
-    //MARK: Touches
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        signUpEmailTextField.resignFirstResponder()
-        signUpPasswordTextField.resignFirstResponder()
-    }
+
     
     
     //MARK: Tap Gesture 
