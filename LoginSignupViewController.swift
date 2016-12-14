@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 class LoginSignupViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
 
@@ -85,8 +86,8 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
                 presentMessageViewController(title: "OOOOOPS", message: "OOOOOPS")
             }
         } else if signUpButton.currentTitle == "Log in!" {
-            UserController.authenticateUser(email: email, password: password, completion: { (success) in
-                if success {
+            UserController.authenticateUser(email: email, password: password, completion: { (true, user) in
+                if true, (user != nil) {
                     self.dismiss(animated: true, completion: nil)
                 } else {
                     self.presentMessageViewController(title: "Oops", message: "couldn't authenticate user")
@@ -196,17 +197,16 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     
-
-    
-    
     //MARK: Tap Gesture 
     func profileImageTap() {
-    	let profileImageTap = UITapGestureRecognizer(target: self, action: #selector(profileImageTapped))
+        let profileImageTap = UITapGestureRecognizer(target: self, action: #selector(profileImageTapped))
     	profileImageView.isUserInteractionEnabled = true
         profileImageView.addGestureRecognizer(profileImageTap)
     }
     
     func profileImageTapped() {
+        handleCameraPermissions()
+
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         
@@ -218,6 +218,7 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
                 self.present(imagePicker, animated: true, completion: nil)
             }))
         }
+        
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
             alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: { (UIAlertAction) -> Void in
                 imagePicker.sourceType = .camera
@@ -232,6 +233,29 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
 
     
     //MARK: Image Picker
+    func handleCameraPermissions() {
+        let mediaType = AVMediaTypeVideo
+        
+        let authStatus: AVAuthorizationStatus = AVCaptureDevice.authorizationStatus(forMediaType: mediaType)
+        
+        switch authStatus {
+        case .authorized:
+            print("you have authorized AV")
+            return
+        case .denied:
+            print("you have denied AV")
+            
+            if let appSettings = URL(string: UIApplicationOpenSettingsURLString) {
+                UIApplication.shared.open(appSettings, options: [:], completionHandler: nil)
+            }
+        case .notDetermined:
+            print("you have not determined AV")
+        case .restricted:
+            print("you have restricted AV")
+        }
+    }
+    
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         guard let originalImage = info[UIImagePickerControllerOriginalImage] as? UIImage else {return}
         
