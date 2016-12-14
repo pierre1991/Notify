@@ -18,6 +18,43 @@ class InviteFriendsViewController: UIViewController, MFMailComposeViewController
     }
 
     
+    //MARK: Status Bar
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent
+    }
+    
+    
+    //MARK: IBActions
+    @IBAction func messageButtonTapped(_ sender: Any) {
+        if MFMessageComposeViewController.canSendText() {
+            let messageComposer = MFMessageComposeViewController()
+            
+            messageComposer.messageComposeDelegate = self
+            messageComposer.body = "Hey download this app so we can share notes!"
+            
+            present(messageComposer, animated: true, completion: {
+                UINavigationBar.appearance().barTintColor = UIColor.purpleThemeColor()
+                UIBarButtonItem.appearance().tintColor = UIColor.white
+            })
+        }
+    }
+    
+    @IBAction func emailButtonTapped(_ sender: Any) {
+        if MFMailComposeViewController.canSendMail() {
+            let mailComposer = MFMailComposeViewController()
+            
+            mailComposer.mailComposeDelegate = self
+            mailComposer.setSubject("NotifyMe")
+            mailComposer.setMessageBody("Hey download this app so we can share notes!", isHTML: false)
+            
+            present(mailComposer, animated: true, completion: {
+                UINavigationBar.appearance().barTintColor = UIColor.purpleThemeColor()
+                UIBarButtonItem.appearance().tintColor = UIColor.white
+            })
+        }
+    }
+    
+    
     //MARK: Mail Compose
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         switch result {
@@ -48,14 +85,4 @@ class InviteFriendsViewController: UIViewController, MFMailComposeViewController
         self.dismiss(animated: true, completion: nil)
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
 }
