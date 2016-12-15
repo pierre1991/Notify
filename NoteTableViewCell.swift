@@ -33,7 +33,3 @@ class NoteTableViewCell: UITableViewCell {
 
 }
 
-extension NoteTableViewCell {
-    
-    
-}
