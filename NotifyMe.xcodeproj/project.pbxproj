@@ -9,12 +9,17 @@
 /* Begin PBXBuildFile section */
 		1D961642309A16C1A1D57337 /* Pods_NotifyMeUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FCBD628720534B95D1F66B3A /* Pods_NotifyMeUITests.framework */; };
 		47547FE465332B1DE481039F /* Pods_NotifyMeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 788EC15BEE547CA4AF09D3D5 /* Pods_NotifyMeTests.framework */; };
+		8F1AA3511DFF276900A9BA28 /* DetailNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1AA3501DFF276900A9BA28 /* DetailNoteViewController.swift */; };
+		8F1AA3531DFF380600A9BA28 /* InviteFriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1AA3521DFF380600A9BA28 /* InviteFriendsViewController.swift */; };
+		8F34730F1DEE37D2001E3D06 /* NoteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F34730E1DEE37D2001E3D06 /* NoteTableViewCell.swift */; };
 		8F3895C61DCCEE0200D952BA /* LoginSignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3895C51DCCEE0200D952BA /* LoginSignupViewController.swift */; };
 		8F3895C91DCCFC3D00D952BA /* ImageUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3895C81DCCFC3D00D952BA /* ImageUploader.swift */; };
 		8F3895CB1DCD024C00D952BA /* NoteListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3895CA1DCD024C00D952BA /* NoteListViewController.swift */; };
 		8F3895CD1DCD0B8400D952BA /* CircularImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3895CC1DCD0B8400D952BA /* CircularImageView.swift */; };
 		8F3895D11DCD34B000D952BA /* CreateNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3895D01DCD34B000D952BA /* CreateNoteViewController.swift */; };
 		8F3895D31DCD3EF600D952BA /* UserCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F3895D21DCD3EF600D952BA /* UserCollectionViewCell.swift */; };
+		8F41D4D71DEE4A3B009222BD /* AppearanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F41D4D61DEE4A3B009222BD /* AppearanceController.swift */; };
+		8F41D4D91DEE4B2D009222BD /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F41D4D81DEE4B2D009222BD /* UIColor+Extension.swift */; };
 		8F49A98A1DB9748D005B7C4F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F49A9891DB9748D005B7C4F /* AppDelegate.swift */; };
 		8F49A98F1DB9748D005B7C4F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8F49A98D1DB9748D005B7C4F /* Main.storyboard */; };
 		8F49A9911DB9748D005B7C4F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F49A9901DB9748D005B7C4F /* Assets.xcassets */; };
@@ -27,6 +32,7 @@
 		8F49A9C21DB97F05005B7C4F /* FirebaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F49A9C11DB97F05005B7C4F /* FirebaseController.swift */; };
 		8F49A9C81DB98433005B7C4F /* NoteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F49A9C71DB98433005B7C4F /* NoteController.swift */; };
 		8F49A9CA1DB9850E005B7C4F /* UserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F49A9C91DB9850E005B7C4F /* UserController.swift */; };
+		8FD9C8F11DD6D1B700043B01 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FD9C8F01DD6D1B700043B01 /* ProfileViewController.swift */; };
 		BFDEB79FF29F9FFB763AA50F /* Pods_NotifyMe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63DDBF3B687DE31209CA2C44 /* Pods_NotifyMe.framework */; };
 /* End PBXBuildFile section */
 
@@ -53,12 +59,17 @@
 		6761820B5E6A0D4F0A682298 /* Pods-NotifyMeUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotifyMeUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-NotifyMeUITests/Pods-NotifyMeUITests.release.xcconfig"; sourceTree = "<group>"; };
 		74C564E3AE8BACA2758C233C /* Pods-NotifyMeUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotifyMeUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NotifyMeUITests/Pods-NotifyMeUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		788EC15BEE547CA4AF09D3D5 /* Pods_NotifyMeTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NotifyMeTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8F1AA3501DFF276900A9BA28 /* DetailNoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailNoteViewController.swift; sourceTree = "<group>"; };
+		8F1AA3521DFF380600A9BA28 /* InviteFriendsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InviteFriendsViewController.swift; sourceTree = "<group>"; };
+		8F34730E1DEE37D2001E3D06 /* NoteTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteTableViewCell.swift; sourceTree = "<group>"; };
 		8F3895C51DCCEE0200D952BA /* LoginSignupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginSignupViewController.swift; sourceTree = "<group>"; };
 		8F3895C81DCCFC3D00D952BA /* ImageUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageUploader.swift; sourceTree = "<group>"; };
 		8F3895CA1DCD024C00D952BA /* NoteListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteListViewController.swift; sourceTree = "<group>"; };
 		8F3895CC1DCD0B8400D952BA /* CircularImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircularImageView.swift; sourceTree = "<group>"; };
 		8F3895D01DCD34B000D952BA /* CreateNoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateNoteViewController.swift; sourceTree = "<group>"; };
 		8F3895D21DCD3EF600D952BA /* UserCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCollectionViewCell.swift; sourceTree = "<group>"; };
+		8F41D4D61DEE4A3B009222BD /* AppearanceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppearanceController.swift; sourceTree = "<group>"; };
+		8F41D4D81DEE4B2D009222BD /* UIColor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		8F49A9861DB9748D005B7C4F /* NotifyMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NotifyMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F49A9891DB9748D005B7C4F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8F49A98E1DB9748D005B7C4F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -77,6 +88,7 @@
 		8F49A9C11DB97F05005B7C4F /* FirebaseController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseController.swift; sourceTree = "<group>"; };
 		8F49A9C71DB98433005B7C4F /* NoteController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteController.swift; sourceTree = "<group>"; };
 		8F49A9C91DB9850E005B7C4F /* UserController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserController.swift; sourceTree = "<group>"; };
+		8FD9C8F01DD6D1B700043B01 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		939A1D015A7EC48ADC81D891 /* Pods-NotifyMeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotifyMeTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NotifyMeTests/Pods-NotifyMeTests.debug.xcconfig"; sourceTree = "<group>"; };
 		9796AFABFA84EA6B204B7F86 /* Pods-NotifyMe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotifyMe.release.xcconfig"; path = "Pods/Target Support Files/Pods-NotifyMe/Pods-NotifyMe.release.xcconfig"; sourceTree = "<group>"; };
 		FCBD628720534B95D1F66B3A /* Pods_NotifyMeUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NotifyMeUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -127,6 +139,9 @@
 				8F3895C51DCCEE0200D952BA /* LoginSignupViewController.swift */,
 				8F3895CA1DCD024C00D952BA /* NoteListViewController.swift */,
 				8F3895D01DCD34B000D952BA /* CreateNoteViewController.swift */,
+				8F1AA3501DFF276900A9BA28 /* DetailNoteViewController.swift */,
+				8FD9C8F01DD6D1B700043B01 /* ProfileViewController.swift */,
+				8F1AA3521DFF380600A9BA28 /* InviteFriendsViewController.swift */,
 			);
 			name = ViewControllers;
 			path = ..;
@@ -136,6 +151,8 @@
 			isa = PBXGroup;
 			children = (
 				8F3895CC1DCD0B8400D952BA /* CircularImageView.swift */,
+				8F41D4D61DEE4A3B009222BD /* AppearanceController.swift */,
+				8F41D4D81DEE4B2D009222BD /* UIColor+Extension.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -153,6 +170,7 @@
 			isa = PBXGroup;
 			children = (
 				8F3895D21DCD3EF600D952BA /* UserCollectionViewCell.swift */,
+				8F34730E1DEE37D2001E3D06 /* NoteTableViewCell.swift */,
 			);
 			name = Views;
 			path = ..;
@@ -527,12 +545,18 @@
 				8F49A9C21DB97F05005B7C4F /* FirebaseController.swift in Sources */,
 				8F49A9C81DB98433005B7C4F /* NoteController.swift in Sources */,
 				8F49A9BC1DB97A57005B7C4F /* User.swift in Sources */,
+				8F41D4D71DEE4A3B009222BD /* AppearanceController.swift in Sources */,
 				8F49A98A1DB9748D005B7C4F /* AppDelegate.swift in Sources */,
+				8F34730F1DEE37D2001E3D06 /* NoteTableViewCell.swift in Sources */,
+				8F41D4D91DEE4B2D009222BD /* UIColor+Extension.swift in Sources */,
 				8F3895CD1DCD0B8400D952BA /* CircularImageView.swift in Sources */,
+				8F1AA3511DFF276900A9BA28 /* DetailNoteViewController.swift in Sources */,
 				8F3895C91DCCFC3D00D952BA /* ImageUploader.swift in Sources */,
 				8F3895D11DCD34B000D952BA /* CreateNoteViewController.swift in Sources */,
 				8F49A9CA1DB9850E005B7C4F /* UserController.swift in Sources */,
+				8F1AA3531DFF380600A9BA28 /* InviteFriendsViewController.swift in Sources */,
 				8F3895D31DCD3EF600D952BA /* UserCollectionViewCell.swift in Sources */,
+				8FD9C8F11DD6D1B700043B01 /* ProfileViewController.swift in Sources */,
 				8F49A9BE1DB97A5C005B7C4F /* Note.swift in Sources */,
 				8F3895CB1DCD024C00D952BA /* NoteListViewController.swift in Sources */,
 			);
@@ -689,6 +713,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = VXY4XHS49U;
 				INFOPLIST_FILE = NotifyMe/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.dev.Pierre.NotifyMe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -703,6 +728,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = VXY4XHS49U;
 				INFOPLIST_FILE = NotifyMe/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.dev.Pierre.NotifyMe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
