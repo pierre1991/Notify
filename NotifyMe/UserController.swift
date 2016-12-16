@@ -34,18 +34,7 @@ class UserController {
     }
     
     
-    static func userForIdentifier(identifier: String, completion: @escaping (_ user: User?) -> Void) {
-        FirebaseController.dataAtEndpoint(endpoint: "users\(identifier)", completion: {(data) -> Void in
-            if let json = data as? [String:AnyObject] {
-                let user = User(json: json, identifier: identifier)
-                completion(user)
-            } else {
-                completion(nil)
-            }
-        })
-    }
-    
-    
+    // Create User
     static func createUser(email: String, password: String, imageEndpoint: String? = nil, completion: @escaping (_ success: Bool, _ user: User?) -> Void) {
        	FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user, error) in
             if error == nil {
@@ -65,6 +54,7 @@ class UserController {
     }
     
     
+    // Authenticate User
     static func authenticateUser(email: String, password: String, completion: @escaping (_ success: Bool, _ user: User?) -> Void) {
         FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
             guard let user = user else { return }
@@ -74,7 +64,7 @@ class UserController {
                 
                 UserController.userForIdentifier(identifier: user.uid, completion: { (user) in
                     if let user = user {
-                        UserController.sharedController.currentUser = user
+                        sharedController.currentUser = user
                     }
                   
                     completion(true, user)
@@ -87,6 +77,20 @@ class UserController {
     }
     
     
+    // Return User from Identifier
+    static func userForIdentifier(identifier: String, completion: @escaping (_ user: User?) -> Void) {
+        FirebaseController.dataAtEndpoint(endpoint: "users\(identifier)", completion: {(data) -> Void in
+            if let json = data as? [String:AnyObject] {
+                let user = User(json: json, identifier: identifier)
+                completion(user)
+            } else {
+                completion(nil)
+            }
+        })
+    }
+    
+    
+    // Get all Users of App
     static func fetchAllUsers(completion: @escaping (_ user: [User]) -> Void) {
         FirebaseController.dataAtEndpoint(endpoint: "users") { (data) in
             if let data = data as? [String:AnyObject] {

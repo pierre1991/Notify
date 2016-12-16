@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Firebase
 
 fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
     switch (lhs, rhs) {
@@ -34,38 +35,28 @@ class NoteController {
     static let sharedController = NoteController()
     
     
-    static func fetchNotesForUser(user: User, completion: @escaping (_ notes: [Note]?) -> Void) {
+	static func fetchNotesForUser(_ user: User, completion:@escaping (_ notes: [Note]?) -> Void) {
         var allNotes: [Note] = []
         let dispatchGroup = DispatchGroup()
         
         dispatchGroup.enter()
-        notesForUser(UserController.sharedController.currentUser, completion: {(notes) -> Void in
+        
+        notesForUser(UserController.sharedController.currentUser) { (notes) -> Void in
             if let notes = notes {
                 allNotes = notes
-                completion(allNotes)
             }
             dispatchGroup.leave()
-        })
-        dispatchGroup.notify(queue: .main, execute: {
-        	let orderedNotes = orderNotes(note: allNotes)
+        }
+        
+        dispatchGroup.notify(queue: DispatchQueue.main) { () -> Void in
+            let orderedNotes = orderNotes(note: allNotes)
             completion(orderedNotes)
-        })
-    }
-    
-    static func notesFromIdentifier(identifier: String, completion: @escaping (_ note: Note?) -> Void) {
-        FirebaseController.dataAtEndpoint(endpoint: "/notes/\(identifier)", completion: {(data) -> Void in
-            if let data = data as? [String:AnyObject] {
-                let note = Note(json: data, identifier: identifier)
-                completion(note)
-            } else {
-                completion(nil)
-            }
-        })
+        }
     }
     
     
     static func notesForUser(_ user: User, completion:@escaping (_ notes: [Note]?) -> Void) {
-        FirebaseController.base.child("/users/\(user.identifier!)").child("noteId").observeSingleEvent(of: .value, with: {snapshot in
+        FirebaseController.base.child("/users/\(UserController.sharedController.currentUser)").child("noteId").observeSingleEvent(of: .value, with: {snapshot in
             if let noteIdArray = snapshot.value as? [String] {
                 var noteArray: [Note] = []
                 
@@ -73,7 +64,10 @@ class NoteController {
                     notesFromIdentifier(identifier: noteId, completion: { (notes) -> Void in
                         if let note = notes {
                             noteArray.append(note)
+                            
+                            completion(noteArray)
                         }
+
                         if noteId == noteIdArray.last {
                             let orderedNotes = orderNotes(note: noteArray)
                             completion(orderedNotes)
@@ -85,29 +79,20 @@ class NoteController {
             }
         })
     }
+
     
-    
-    static func createNote(title: String, text: String?, identifier: String, users: [User], completion: (_ success: Bool, _ note: Note?) -> Void) {
-        if let text = text {
-            var note = Note(title: title, text: text, identifier: UserController.sharedController.currentUser.identifier, users: users)
-            note.save()
-            
-            guard let noteId = note.identifier else {
-                completion(false, nil)
-                return
+    static func notesFromIdentifier(identifier: String, completion: @escaping (_ note: Note?) -> Void) {
+        FirebaseController.dataAtEndpoint(endpoint: "/notes/\(identifier)", completion: {(data) -> Void in
+            if let data = data as? [String: AnyObject] {
+                let note = Note(json: data, identifier: identifier)
+                
+                completion(note)
+            } else {
+                completion(nil)
             }
-            
-            var user = UserController.sharedController.currentUser
-            user?.noteId.append(noteId)
-            user?.save()
-            
-            for var user in users {
-                user.noteId.append(noteId)
-                user.save()
-            }
-        }
+        })
     }
- 
+    
     
     static func fetchUsersForNote(note: Note, completion: @escaping (_ user: [User]?) -> Void) {
         FirebaseController.base.child("/notes/\(note.identifier)").child("userIds").observeSingleEvent(of: .value, with: {snapshot in
@@ -129,16 +114,41 @@ class NoteController {
     }
     
     
+    static func createNote(title: String, text: String?, identifier: String, users: [User], completion: (_ note: Note?) -> Void) {
+        if let text = text {
+            var note = Note(title: title, text: text, identifier: UserController.sharedController.currentUser.identifier, users: users)
+            note.save()
+            
+            guard let noteId = note.identifier else {
+                completion(nil)
+                return
+            }
+            
+            var user = UserController.sharedController.currentUser
+            user?.noteId.append(noteId)
+            user?.save()
+            
+            for var user in users {
+                user.noteId.append(noteId)
+                user.save()
+            }
+        }
+    }
+ 
+    
     static func orderNotes(note: [Note]) -> [Note] {
         return note.sorted(by: {$0.0.identifier > $0.1.identifier})
     }
     
     
-//    static func saveNote(var note: Note) {
-//        note.save()
-//    }
+    static func saveNote(note: Note) {
+        var note = note
+        note.save()
+    }
+    
     
     static func deleteNote(note: Note) {
         note.delete()
     }
+    
 }
