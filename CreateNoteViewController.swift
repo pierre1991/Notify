@@ -13,7 +13,7 @@ class CreateNoteViewController: UIViewController {
     
     
     //MARK: Properties
-    let currentUser = FIRAuth.auth()?.currentUser
+	let currentUser = FIRAuth.auth()?.currentUser
     var allUsers: [User]?
     var selectedUsersForNote: [User] = []
     
@@ -30,10 +30,10 @@ class CreateNoteViewController: UIViewController {
         super.viewDidLoad()
         
         setupCollectionView()
-        
+
         getAllUsers { (users) in
             if let users = users {
-                self.allUsers = users.filter({$0.identifier != FIRAuth.auth()?.currentUser?.uid})
+                self.allUsers = users.filter({$0.identifier != UserController.sharedController.currentUser.identifier})
     
                 DispatchQueue.main.async {
                     self.userCollectionView.reloadData()
@@ -56,26 +56,23 @@ class CreateNoteViewController: UIViewController {
     @IBAction func createNoteButtonTapped(_ sender: Any) {
         guard let title = noteTitleTextField.text, let body = noteBodyTextView.text else {return}
         
-        NoteController.createNote(title: title, text: body, identifier: (FIRAuth.auth()?.currentUser?.uid)!, users: selectedUsersForNote, completion: { (success, note) -> Void in
-            if note != nil {
-                guard let navigationController = navigationController else {return}
-                navigationController.popToRootViewController(animated: true)
-                
-                self.selectedUsersForNote = (note?.users)!
+        NoteController.createNote(title: title, text: body, identifier: (FIRAuth.auth()?.currentUser?.uid)!, users: selectedUsersForNote, completion: { (note) -> Void in
+            if note == nil {
+            	print("couldnt create note")
             } else {
-                //TODO: present user with alert
-                
-                print("unable to create note")
+        		_ = navigationController?.popToRootViewController(animated: true)
             }
         })
     }
     
     
+    //MARK: Builder Functions
     func getAllUsers(completion: @escaping (_ users: [User]?) -> Void) {
         UserController.fetchAllUsers { (users) in
             completion(users)
         }
     }
+    
 
 }
 
@@ -88,6 +85,7 @@ extension CreateNoteViewController: UICollectionViewDelegate, UICollectionViewDa
             return 0
         }
     }
+    
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "userProfileImage", for: indexPath) as! UserCollectionViewCell
@@ -104,16 +102,21 @@ extension CreateNoteViewController: UICollectionViewDelegate, UICollectionViewDa
     	return cell
     }
     
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath)
         
-        cell?.contentView.backgroundColor = .blue
+        cell?.contentView.backgroundColor = .purpleThemeColor()
+        
+        cell?.contentView.layer.cornerRadius = (cell?.frame.width)! / 2
+        cell?.contentView.clipsToBounds = true
         
         if let users = allUsers {
             let user = users[indexPath.item]
             self.selectedUsersForNote.append(user)
         }
     }
+    
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath)
@@ -122,10 +125,9 @@ extension CreateNoteViewController: UICollectionViewDelegate, UICollectionViewDa
         self.selectedUsersForNote.removeLast()
     }
     
+    
     func setupCollectionView() {
         userCollectionView.allowsMultipleSelection = true
-        
-        
     }
     
 }
