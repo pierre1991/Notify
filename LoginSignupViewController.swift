@@ -64,7 +64,7 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
     
     //MARK: IBActions
     @IBAction func signUpButtonTapped(_ sender: Any) {
-        guard let email = signUpEmailTextField.text, isValidEmail(email: email), let password = signUpPasswordTextField.text else {return}
+        guard let email = signUpEmailTextField.text, let password = signUpPasswordTextField.text else {return}
         
         if signUpButton.currentTitle == "Sign up!" {
             if let profileImage = profileImage {
@@ -94,6 +94,7 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
                 }
             })
         }
+        
     }
     
     
@@ -325,6 +326,7 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     
+    /*
     //MARK: Email Validity
     func isValidEmail(email: String) -> Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
@@ -333,5 +335,6 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
         
         return emailTest.evaluate(with: email)
     }
+ 	*/
     
 }
