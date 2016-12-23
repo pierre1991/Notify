@@ -15,39 +15,53 @@ class NoteListViewController: UIViewController {
     var notes: [Note] = []
     
     
+    
+    
     //MARK: IBOutlets
     @IBOutlet weak var tableView: UITableView!
-    
     @IBOutlet weak var noNotesView: UIView!
 	
+    @IBOutlet weak var profileImage: CircularImageView!
+    
     
     //MARK: View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+
+    	tableView.tableFooterView = UIView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        
-        
-        
-        if FIRAuth.auth()?.currentUser == nil {
-            performSegue(withIdentifier: "toSignupLoginView", sender: self)
-        }
-        
         if let currentUser = UserController.sharedController.currentUser {
-        	loadNotesForUser(user: currentUser)
+            loadNotesForUser(user: currentUser)
+        } else {
+            performSegue(withIdentifier: "toSignupLoginView", sender: self)
+		}
+    }
+    
+    
+    //MARK: Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destinationViewController = segue.destination as? DetailNoteViewController
+        
+        if segue.identifier == "toNoteDetailView" {
+            guard let indexPath = tableView.indexPathForSelectedRow else {return}
+            
+            let note = self.notes[indexPath.row]
+            destinationViewController?.note = note
         }
     }
     
     
     //MARK: Builder Functions
     func loadNotesForUser(user: User) {
-        NoteController.fetchNotesForUser(user: user, completion: { (notes) -> Void in
+        NoteController.fetchNotesForUser(UserController.sharedController.currentUser, completion: { (notes) -> Void in
             if let notes = notes {
                 self.notes = notes
-                
+                            
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
@@ -56,6 +70,13 @@ class NoteListViewController: UIViewController {
             }
         })
     }
+    
+    func updateUsersImage(identifier: String) {
+        ImageController.imageForIdentifier(identifier: identifier) { (image) -> Void in
+            self.profileImage.image = image
+        }
+    }
+    
     
 }
 
