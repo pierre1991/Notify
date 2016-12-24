@@ -15,8 +15,6 @@ class NoteListViewController: UIViewController {
     var notes: [Note] = []
     
     
-    
-    
     //MARK: IBOutlets
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var noNotesView: UIView!
@@ -35,7 +33,8 @@ class NoteListViewController: UIViewController {
         super.viewWillAppear(animated)
         
         if let currentUser = UserController.sharedController.currentUser {
-            loadNotesForUser(user: currentUser)
+            //loadNotesForUser(user: currentUser)
+            print(currentUser.identifier ?? "")
         } else {
             performSegue(withIdentifier: "toSignupLoginView", sender: self)
 		}
