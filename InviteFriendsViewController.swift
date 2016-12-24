@@ -25,6 +25,12 @@ class InviteFriendsViewController: UIViewController, MFMailComposeViewController
     
     
     //MARK: IBActions
+    @IBAction func dismissViewButtonTapped(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
+   
+    
+    
     @IBAction func messageButtonTapped(_ sender: Any) {
         if MFMessageComposeViewController.canSendText() {
             let messageComposer = MFMessageComposeViewController()
