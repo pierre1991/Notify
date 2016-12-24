@@ -56,7 +56,7 @@ class NoteController {
     
     
     static func notesForUser(_ user: User, completion:@escaping (_ notes: [Note]?) -> Void) {
-        FirebaseController.base.child("/users/\(UserController.sharedController.currentUser)").child("noteId").observeSingleEvent(of: .value, with: {snapshot in
+        FirebaseController.base.child("/users/\(user.identifier)").child("noteId").observeSingleEvent(of: .value, with: {snapshot in
             if let noteIdArray = snapshot.value as? [String] {
                 var noteArray: [Note] = []
                 
