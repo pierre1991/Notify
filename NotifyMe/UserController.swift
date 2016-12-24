@@ -37,7 +37,9 @@ class UserController {
     // Create User
     static func createUser(email: String, password: String, imageEndpoint: String? = nil, completion: @escaping (_ success: Bool, _ user: User?) -> Void) {
         FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user, error) -> Void in
-            if let identifier = user?.uid {
+            if error == nil {
+                guard let identifier = user?.uid else { return }
+                
                 var user = User(email: email, imageEndpoint: imageEndpoint, identifier: identifier)
                 user.save()
                 
@@ -47,22 +49,7 @@ class UserController {
             } else {
                 print("unable to create user")
                 completion(false, nil)
-            }
-            
-            
-//            if error == nil {
-//                guard let identifier = user?.uid else {return}
-//                
-//                var user = User(email: email, imageEndpoint: imageEndpoint, identifier: identifier)
-//                user.save()
-//                
-//                authenticateUser(email: email, password: password, completion: { (success, user) -> Void in
-//                    completion(success, user)
-//                })
-//            } else {
-//                print("unable to create user")
-//                completion(false, nil)
-//            }
+        	}
         })
     }
     
@@ -81,7 +68,7 @@ class UserController {
                 
                 UserController.userForIdentifier(identifier: user.uid, completion: { (user) -> Void in
                     if let user = user {
-                        UserController.sharedController.currentUser = user
+                        sharedController.currentUser = user
                     }
                     
                     completion(true, user)
@@ -96,6 +83,7 @@ class UserController {
         FirebaseController.dataAtEndpoint(endpoint: "users/\(identifier)", completion: {(data) -> Void in
             if let json = data as? [String:AnyObject] {
                 let user = User(json: json, identifier: identifier)
+                
                 completion(user)
             } else {
                 completion(nil)
