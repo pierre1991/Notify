@@ -29,11 +29,11 @@ class FirebaseController {
 
 protocol FirebaseType {
     
-    var identifier: String? {get set}
-    var endpoint: String {get}
-    var jsonValue: [String : AnyObject] {get}
+    var identifier: String? { get set }
+    var endpoint: String { get }
+    var jsonValue: [String: AnyObject] { get }
     
-    init?(json: [String : AnyObject], identifier: String)
+    init?(json: [String: AnyObject], identifier: String)
     
     mutating func save()
     func delete()

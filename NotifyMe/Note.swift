@@ -12,10 +12,10 @@ struct Note: FirebaseType {
     
     private let kTitle = "title"
     private let kText = "text"
-    private let kUids = "userIds"
+    private let kUID = "userIds"
     
     var title: String
-    var text: String = ""
+    var text: String
     var users: [User] = []
     var identifier: String?
     var userIds: [String] = []
@@ -23,25 +23,30 @@ struct Note: FirebaseType {
         return "notes"
     }
     
-    var jsonValue: [String : AnyObject] {
-        return [kTitle : title as AnyObject, kText : text as AnyObject, kUids : users.map({$0.identifier}) as AnyObject]
+    var jsonValue: [String: AnyObject] {
+        return [kTitle: title as AnyObject, kText: text as AnyObject, kUID: users.map({$0.identifier}) as AnyObject]
     }
     
     
-    init(title: String, text: String, identifier: String? = nil, users: [User]) {
+    init(title: String, text: String, identifier: String, users: [User]) {
         self.title = title
         self.text = text
         self.users = users
     }
     
     init?(json jsonValue: [String:AnyObject], identifier: String) {
-        guard let title = jsonValue[kTitle] as? String, let text = jsonValue[kText] as? String else { return nil }
+        guard let title = jsonValue[kTitle] as? String, let text = jsonValue[kText] as? String else {
+            self.title = ""
+            self.text = ""
+            
+            return nil
+        }
         
         self.title = title
         self.text = text
         self.identifier = identifier
         
-        if let userIds = jsonValue[kUids] as? [String] {
+        if let userIds = jsonValue[kUID] as? [String] {
             self.userIds = userIds
         }
     }
