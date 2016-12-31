@@ -56,7 +56,7 @@ class NoteController {
     
     
     static func notesForUser(_ user: User, completion:@escaping (_ notes: [Note]?) -> Void) {
-        FirebaseController.base.child("/users/\(user.identifier)").child("noteId").observeSingleEvent(of: .value, with: {snapshot in
+        FirebaseController.base.child("/users/\(user.identifier!)").child("noteId").observeSingleEvent(of: .value, with: {snapshot in
             if let noteIdArray = snapshot.value as? [String] {
                 var noteArray: [Note] = []
                 
@@ -64,8 +64,6 @@ class NoteController {
                     notesFromIdentifier(identifier: noteId, completion: { (notes) -> Void in
                         if let note = notes {
                             noteArray.append(note)
-                            
-                            completion(noteArray)
                         }
 
                         if noteId == noteIdArray.last {
@@ -95,7 +93,7 @@ class NoteController {
     
     
     static func fetchUsersForNote(note: Note, completion: @escaping (_ user: [User]?) -> Void) {
-        FirebaseController.base.child("/notes/\(note.identifier)").child("userIds").observeSingleEvent(of: .value, with: {snapshot in
+        FirebaseController.base.child("/notes/\(note.identifier!)").child("userIds").observeSingleEvent(of: .value, with: {snapshot in
             if let userIdArray = snapshot.value as? [String] {
                 var userArray: [User] = []
                 
@@ -114,25 +112,25 @@ class NoteController {
     }
     
     
-    static func createNote(title: String, text: String?, identifier: String, users: [User], completion: (_ note: Note?) -> Void) {
-        if let text = text {
-            var note = Note(title: title, text: text, identifier: UserController.sharedController.currentUser.identifier, users: users)
-            note.save()
-            
-            guard let noteId = note.identifier else {
-                completion(nil)
-                return
-            }
-            
-            var user = UserController.sharedController.currentUser
-            user?.noteId.append(noteId)
-            user?.save()
-            
-            for var user in users {
-                user.noteId.append(noteId)
-                user.save()
-            }
+    static func createNote(title: String, text: String, identifier: String, users: [User], completion: (_ success: Bool, _ note: Note?) -> Void) {
+        var note = Note(title: title, text: text, identifier: UserController.sharedController.currentUser.identifier!, users: users)
+        note.save()
+        
+        guard let noteId = note.identifier else {
+            completion(false, nil)
+            return
         }
+        
+        var user = UserController.sharedController.currentUser
+        user?.noteId.append(noteId)
+        user?.save()
+        
+        for var user in users {
+            user.noteId.append(noteId)
+            user.save()
+        }
+        
+        completion(true, note)
     }
  
     
