@@ -13,13 +13,16 @@ class CreateNoteViewController: UIViewController {
     
     
     //MARK: Properties
-	let currentUser = FIRAuth.auth()?.currentUser
+    //let currentUser: User?
     var allUsers: [User]?
     var selectedUsersForNote: [User] = []
     
     
     //MARK: IBOutlets
+    @IBOutlet weak var rightBarButton: UIBarButtonItem!
+    
     @IBOutlet weak var userCollectionView: UICollectionView!
+    
     @IBOutlet weak var noteTitleTextField: UITextField!
     @IBOutlet weak var noteBodyTextView: UITextView!
     @IBOutlet weak var createNoteButton: UIButton!
@@ -53,16 +56,26 @@ class CreateNoteViewController: UIViewController {
     
     
     //MARK: IBActions
+    @IBAction func rightBarActionButtonTapped(_ sender: Any) {
+        if rightBarButton.image == #imageLiteral(resourceName: "more_button") {
+            perform(#selector(reportUserAlertController))
+        } else if rightBarButton.image == #imageLiteral(resourceName: "search_button") {
+            print("searching for friends")
+        }
+    }
+    
+    
     @IBAction func createNoteButtonTapped(_ sender: Any) {
-        guard let title = noteTitleTextField.text, let body = noteBodyTextView.text else {return}
+        guard let title = noteTitleTextField.text, let text = noteBodyTextView.text else {return}
         
-        NoteController.createNote(title: title, text: body, identifier: (FIRAuth.auth()?.currentUser?.uid)!, users: selectedUsersForNote, completion: { (note) -> Void in
-            if note == nil {
-            	print("couldnt create note")
+        NoteController.createNote(title: title, text: text, identifier: UserController.sharedController.currentUser.identifier!, users: selectedUsersForNote) { (success, note) in
+            if note != nil {
+                _ = navigationController?.popToRootViewController(animated: true)
+                self.selectedUsersForNote = (note?.users)!
             } else {
-        		_ = navigationController?.popToRootViewController(animated: true)
-            }
-        })
+            	print("couldn't create note")
+        	}
+        }
     }
     
     
@@ -71,6 +84,23 @@ class CreateNoteViewController: UIViewController {
         UserController.fetchAllUsers { (users) in
             completion(users)
         }
+    }
+    
+    //MARK: Report User Alert Controller
+    func reportUserAlertController() {
+        let reportActionSheet = UIAlertController(title: "Report", message: "", preferredStyle: .actionSheet)
+        
+		let reportAction = UIAlertAction(title: "Report Users", style: .default) { (alert) in
+            for user in self.selectedUsersForNote {
+                ReportController.reportUser(user)
+            }
+        }
+        let cancelAction = UIAlertAction(title: "cancel", style: .cancel, handler: nil)
+        
+        reportActionSheet.addAction(reportAction)
+        reportActionSheet.addAction(cancelAction)
+        
+        present(reportActionSheet, animated: true, completion: nil)
     }
     
 
@@ -114,6 +144,8 @@ extension CreateNoteViewController: UICollectionViewDelegate, UICollectionViewDa
         if let users = allUsers {
             let user = users[indexPath.item]
             self.selectedUsersForNote.append(user)
+            
+            rightBarButton.image = #imageLiteral(resourceName: "more_button")
         }
     }
     
@@ -123,6 +155,10 @@ extension CreateNoteViewController: UICollectionViewDelegate, UICollectionViewDa
         cell?.contentView.backgroundColor = nil
         
         self.selectedUsersForNote.removeLast()
+        
+        if self.selectedUsersForNote.isEmpty {
+        	rightBarButton.image = #imageLiteral(resourceName: "search_button")
+        }
     }
     
     
