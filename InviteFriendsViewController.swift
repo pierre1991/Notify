@@ -50,6 +50,8 @@ class InviteFriendsViewController: UIViewController, MFMailComposeViewController
             let mailComposer = MFMailComposeViewController()
             
             mailComposer.mailComposeDelegate = self
+            
+            mailComposer.setToRecipients([])
             mailComposer.setSubject("NotifyMe")
             mailComposer.setMessageBody("Hey download this app so we can share notes!", isHTML: false)
             
@@ -57,6 +59,8 @@ class InviteFriendsViewController: UIViewController, MFMailComposeViewController
                 UINavigationBar.appearance().barTintColor = UIColor.purpleThemeColor()
                 UIBarButtonItem.appearance().tintColor = UIColor.white
             })
+        } else {
+            showSendMailErrorAlert()
         }
     }
     
@@ -89,6 +93,19 @@ class InviteFriendsViewController: UIViewController, MFMailComposeViewController
         }
         
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    
+    func showSendMailErrorAlert() {
+        let sendMailErrorAlert = UIAlertController(title: "Could not send email", message: "Your device could not send e=mail. Please check email configuration and try again.", preferredStyle: .alert)
+        
+        let settingsAction = UIAlertAction(title: "settings", style: .default, handler: nil)
+        let cancelAction = UIAlertAction(title: "cancel", style: .cancel, handler: nil)
+        
+        sendMailErrorAlert.addAction(settingsAction)
+        sendMailErrorAlert.addAction(cancelAction)
+        
+        present(sendMailErrorAlert, animated: true, completion: nil)
     }
     
 }
