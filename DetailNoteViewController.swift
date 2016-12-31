@@ -31,6 +31,12 @@ class DetailNoteViewController: UIViewController {
         updateNote(note: note)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        getUsersOfNote()
+    }
+    
     
     //MARK: Touches
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -54,6 +60,20 @@ class DetailNoteViewController: UIViewController {
         
         noteTitleTextField.text = title
         noteBodyTextView.text = text
+    }
+    
+    func getUsersOfNote() {
+        guard let note = note else { return }
+        
+        NoteController.fetchUsersForNote(note: note) { (users) in
+            if let users = users {
+                self.usersOfNote = users
+                
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
+            }
+        }
     }
 
 }
