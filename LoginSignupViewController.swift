@@ -64,7 +64,7 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
     
     //MARK: IBActions
     @IBAction func signUpButtonTapped(_ sender: Any) {
-        guard let email = signUpEmailTextField.text, let password = signUpPasswordTextField.text else {return}
+        guard let email = signUpEmailTextField.text, isValidEmail(email: email), let password = signUpPasswordTextField.text else { return }
         
         if signUpButton.currentTitle == "Sign up!" {
             if let profileImage = profileImage {
@@ -100,31 +100,39 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
     
     @IBAction func accountActionButtonTapped(_ sender: Any) {
         if accountActionButton.currentTitle == "Log in!" {
-
-            signupStateShowing = false
+			signupStateShowing = false
             loginStateShowing = true
             
             alreadyHaveAccountDescription()
             
-        	//moveInLoginViews()
-            //moveOutSignupViews()
-            
             UIView.animate(withDuration: 0.6, animations: { 
                 self.profileImageView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, -self.view.frame.width, 0, 0)
-                self.signUpButton.setTitle("Log in!", for: .normal)
+                self.signUpButton.alpha = 0
+			}, completion: { (finished) in
+    			self.signUpButton.setTitle("Log in!", for: .normal)
+                
+                UIView.animate(withDuration: 0.6, animations: { 
+                    self.signUpButton.alpha = 1
+                })
             })
+            
 		} else if accountActionButton.currentTitle == "Sign up!" {
     		signupStateShowing = true
             loginStateShowing = false
             
             UIView.animate(withDuration: 0.6, animations: {
                 self.profileImageView.layer.transform = CATransform3DIdentity
+                self.signUpButton.alpha = 0
+            }, completion: { (finished) in
                 self.signUpButton.setTitle("Sign up!", for: .normal)
+                
+                UIView.animate(withDuration: 0.6, animations: {
+                    self.signUpButton.alpha = 1
+                })
             })
             
             needAnAccountDescription()
             
-            //moveOutLoginViews()
             moveInSignupViews()
         }
     }
@@ -149,32 +157,14 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
             self.signUpButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, -self.view.frame.width, 0, 0)
         })
     }
-    
-    /*
-    func moveInLoginViews() {
-        UIView.animate(withDuration: 0.8, animations: {
-            self.loginEmailTextField.layer.transform = CATransform3DIdentity
-            self.loginPasswordTextField.layer.transform = CATransform3DIdentity
-    		self.loginButton.layer.transform = CATransform3DIdentity
-        })
-    }
-    
-    func moveOutLoginViews() {
-        UIView.animate(withDuration: 0.8, animations: {
-            self.loginEmailTextField.layer.transform = CATransform3DTranslate(CATransform3DIdentity, +self.view.frame.width, 0, 0)
-            self.loginPasswordTextField.layer.transform = CATransform3DTranslate(CATransform3DIdentity, +self.view.frame.width, 0, 0)
-            self.loginButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, +self.view.frame.width, 0, 0)
-        })
-    }
- 	*/
-    
 
+    
     func alreadyHaveAccountDescription() {
         UIView.animate(withDuration: 0.8, animations: {
             self.accountActionLabel.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, +self.view.frame.height, 0)
+        }, completion: {(finish) in
             self.accountActionLabel.text = "Need an account?"
             self.accountActionButton.setTitle("Sign up!", for: .normal)
-        }, completion: {(finish) in
             self.accountActionLabel.layer.transform = CATransform3DIdentity
         })
     }
@@ -182,9 +172,9 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
     func needAnAccountDescription() {
         UIView.animate(withDuration: 0.8, animations: {
             self.accountActionLabel.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, +self.view.frame.height, 0)
+        }, completion: {(finish) in
             self.accountActionLabel.text = "Already have an account?"
             self.accountActionButton.setTitle("Log in!", for: .normal)
-        }, completion: {(finish) in
             self.accountActionLabel.layer.transform = CATransform3DIdentity
         })
     }
@@ -286,7 +276,11 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
         if isKeyboardShowing {
             if signupStateShowing == true {
                 UIView.animate(withDuration: 0.8, animations: {
-                    self.notifyMeLabel.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -self.view.frame.height, 0)
+                    self.notifyMeLabel.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -self.view.bounds.height, 0)
+                })
+                
+                UIView.animate(withDuration: 0.8, animations: {
+                    //self.notifyMeLabel.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -self.view.frame.height, 0)
                     self.profileImageView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -((UIScreen.main.bounds.height - self.keyboardHeight) / 4) - (self.profileImageView.frame.height / 2), 0)
                     self.signUpEmailTextField.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -((UIScreen.main.bounds.height - self.keyboardHeight) / 3) - (self.signUpEmailTextField.frame.height / 2), 0)
                     self.signUpPasswordTextField.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -((UIScreen.main.bounds.height - self.keyboardHeight) / 3) - (self.signUpPasswordTextField.frame.height / 2), 0)
@@ -301,7 +295,10 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
             }
         } else {
             if signupStateShowing == true {
-                self.notifyMeLabel.layer.transform = CATransform3DIdentity
+                UIView.animate(withDuration: 0.8, animations: {
+                    self.notifyMeLabel.layer.transform = CATransform3DIdentity
+                })
+                
                 self.profileImageView.layer.transform = CATransform3DIdentity
                 self.signUpEmailTextField.layer.transform = CATransform3DIdentity
                 self.signUpPasswordTextField.layer.transform = CATransform3DIdentity
@@ -326,7 +323,7 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     
-    /*
+    
     //MARK: Email Validity
     func isValidEmail(email: String) -> Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
@@ -335,6 +332,6 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
         
         return emailTest.evaluate(with: email)
     }
- 	*/
+ 	
     
 }
