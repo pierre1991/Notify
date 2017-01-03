@@ -25,7 +25,7 @@ class NoteListViewController: UIViewController {
     //MARK: View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
     	tableView.tableFooterView = UIView()
     }
     
@@ -33,8 +33,11 @@ class NoteListViewController: UIViewController {
         super.viewWillAppear(animated)
         
         if let currentUser = UserController.sharedController.currentUser {
-            //loadNotesForUser(user: currentUser)
-            print(currentUser.identifier ?? "")
+        	loadNotesForUser(user: currentUser)
+            
+            if let imageEndpoint = currentUser.imageEndpoint {
+                fetchUsersImage(imageEndpoint: imageEndpoint)
+            }
         } else {
             performSegue(withIdentifier: "toSignupLoginView", sender: self)
 		}
@@ -42,7 +45,6 @@ class NoteListViewController: UIViewController {
     
     
     //MARK: Navigation
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationViewController = segue.destination as? DetailNoteViewController
         
@@ -53,11 +55,11 @@ class NoteListViewController: UIViewController {
             destinationViewController?.note = note
         }
     }
-    
+
     
     //MARK: Builder Functions
     func loadNotesForUser(user: User) {
-        NoteController.fetchNotesForUser(UserController.sharedController.currentUser, completion: { (notes) -> Void in
+        NoteController.fetchNotesForUser(user, completion: { (notes) -> Void in
             if let notes = notes {
                 self.notes = notes
                             
@@ -70,13 +72,14 @@ class NoteListViewController: UIViewController {
         })
     }
     
-    func updateUsersImage(identifier: String) {
-        ImageController.imageForIdentifier(identifier: identifier) { (image) -> Void in
+    func fetchUsersImage(imageEndpoint: String) {
+        ImageController.imageForIdentifier(identifier: imageEndpoint) { (image) in
+            guard let image = image else { return }
+            
             self.profileImage.image = image
         }
     }
-    
-    
+        
 }
 
 
