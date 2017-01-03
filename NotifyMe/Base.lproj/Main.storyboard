@@ -219,7 +219,7 @@
             </objects>
             <point key="canvasLocation" x="-2019" y="-528"/>
         </scene>
-        <!--Note List View Controller-->
+        <!--NotifyMe-->
         <scene sceneID="jQd-W0-OQ3">
             <objects>
                 <viewController id="KfT-PU-Hfd" customClass="NoteListViewController" customModule="NotifyMe" customModuleProvider="target" sceneMemberID="viewController">
@@ -324,7 +324,7 @@
                             <constraint firstAttribute="trailing" secondItem="OjQ-Ue-eE2" secondAttribute="trailing" id="rnM-wY-dL2"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="CGY-xM-90A">
+                    <navigationItem key="navigationItem" title="NotifyMe" id="CGY-xM-90A">
                         <barButtonItem key="leftBarButtonItem" style="done" id="IPl-8u-1Ri">
                             <view key="customView" contentMode="scaleToFill" id="OMv-I6-PEg">
                                 <rect key="frame" x="16" y="2" width="40" height="40"/>
