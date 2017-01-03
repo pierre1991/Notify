@@ -15,8 +15,8 @@ class CenterAlignedFlowLayout: UICollectionViewFlowLayout {
         let attributes = super.layoutAttributesForElements(in: rect)
         
         // Constants
-        let leftPadding: CGFloat = 8
-        let interItemSpacing: CGFloat = 5
+        let leftPadding: CGFloat = 6
+        let interItemSpacing: CGFloat = 6
         
         // Tracking values
         var leftMargin: CGFloat = leftPadding // Modified to determine origin.x for each item
