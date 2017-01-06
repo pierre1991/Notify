@@ -7,9 +7,12 @@
 //
 
 import UIKit
+import FBSDKCoreKit
+import FBSDKShareKit
 import MessageUI
 
-class InviteFriendsViewController: UIViewController, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate {
+
+class InviteFriendsViewController: UIViewController, FBSDKAppInviteDialogDelegate, MFMessageComposeViewControllerDelegate {
 
 
     //MARK: View Life Cycle
@@ -30,6 +33,13 @@ class InviteFriendsViewController: UIViewController, MFMailComposeViewController
     }
    
     
+    @IBAction func facebookButtonTapped(_ sender: Any) {
+        let content = FBSDKAppInviteContent()
+        
+        content.appLinkURL = URL(string: "")
+        
+        FBSDKAppInviteDialog.show(from: self, with: content, delegate: self)
+    }
     
     @IBAction func messageButtonTapped(_ sender: Any) {
         if MFMessageComposeViewController.canSendText() {
@@ -45,41 +55,7 @@ class InviteFriendsViewController: UIViewController, MFMailComposeViewController
         }
     }
     
-    @IBAction func emailButtonTapped(_ sender: Any) {
-        if MFMailComposeViewController.canSendMail() {
-            let mailComposer = MFMailComposeViewController()
-            
-            mailComposer.mailComposeDelegate = self
-            
-            mailComposer.setToRecipients([])
-            mailComposer.setSubject("NotifyMe")
-            mailComposer.setMessageBody("Hey download this app so we can share notes!", isHTML: false)
-            
-            present(mailComposer, animated: true, completion: {
-                UINavigationBar.appearance().barTintColor = UIColor.purpleThemeColor()
-                UIBarButtonItem.appearance().tintColor = UIColor.white
-            })
-        } else {
-            showSendMailErrorAlert()
-        }
-    }
-    
-    
-    //MARK: Mail Compose
-    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
-        switch result {
-        case .cancelled:
-            print("message was cancelled")
-        case .failed:
-            print("message failed")
-        case .sent:
-            print("message was sent")
-        case .saved:
-            print("message was saved")
-        }
-        
-        self.dismiss(animated: true, completion: nil)
-    }
+
     
     //MARK: Message Compose
     func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
@@ -96,16 +72,13 @@ class InviteFriendsViewController: UIViewController, MFMailComposeViewController
     }
     
     
-    func showSendMailErrorAlert() {
-        let sendMailErrorAlert = UIAlertController(title: "Could not send email", message: "Your device could not send e=mail. Please check email configuration and try again.", preferredStyle: .alert)
-        
-        let settingsAction = UIAlertAction(title: "settings", style: .default, handler: nil)
-        let cancelAction = UIAlertAction(title: "cancel", style: .cancel, handler: nil)
-        
-        sendMailErrorAlert.addAction(settingsAction)
-        sendMailErrorAlert.addAction(cancelAction)
-        
-        present(sendMailErrorAlert, animated: true, completion: nil)
+    //MARK: FBSDKAppInviteDialogDelegate Functions
+    func appInviteDialog(_ appInviteDialog: FBSDKAppInviteDialog!, didCompleteWithResults results: [AnyHashable : Any]!) {
+        print("App Invite Successful")
+    }
+    
+    func appInviteDialog(_ appInviteDialog: FBSDKAppInviteDialog!, didFailWithError error: Error!) {
+        print("App Invite Failed")
     }
     
 }
