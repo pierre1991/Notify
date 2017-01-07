@@ -13,6 +13,7 @@ class AppearanceController {
     
     static func initializeAppearance() {
         UINavigationBar.appearance().barStyle = .black
+        UINavigationBar.appearance().isTranslucent = false
         UINavigationBar.appearance().barTintColor = .purpleThemeColor()
         UINavigationBar.appearance().tintColor = .white
     }
