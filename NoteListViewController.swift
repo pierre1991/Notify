@@ -34,10 +34,6 @@ class NoteListViewController: UIViewController {
         
         if let currentUser = UserController.sharedController.currentUser {
         	loadNotesForUser(user: currentUser)
-            
-            if let imageEndpoint = currentUser.imageEndpoint {
-                fetchUsersImage(imageEndpoint: imageEndpoint)
-            }
         } else {
             performSegue(withIdentifier: "toSignupLoginView", sender: self)
 		}
@@ -72,14 +68,6 @@ class NoteListViewController: UIViewController {
         })
     }
     
-    func fetchUsersImage(imageEndpoint: String) {
-        ImageController.imageForIdentifier(identifier: imageEndpoint) { (image) in
-            guard let image = image else { return }
-            
-            self.profileImage.image = image
-        }
-    }
-        
 }
 
 
