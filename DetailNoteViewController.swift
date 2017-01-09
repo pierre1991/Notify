@@ -27,6 +27,9 @@ class DetailNoteViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        textFieldSetup()
+        textViewSetup()
+        
         guard let note = note else {return}
         updateNote(note: note)
     }
@@ -103,6 +106,7 @@ extension DetailNoteViewController: UICollectionViewDataSource, UICollectionView
     
 }
 
+
 extension DetailNoteViewController: UITextFieldDelegate, UITextViewDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -111,4 +115,19 @@ extension DetailNoteViewController: UITextFieldDelegate, UITextViewDelegate {
         return true
     }
     
+}
+
+
+//MARK: View Setup
+extension DetailNoteViewController {
+    
+    func textFieldSetup() {
+        noteTitleTextField.layer.borderWidth = 1
+        noteTitleTextField.layer.borderColor = UIColor.purpleThemeColor().cgColor
+    }
+    
+    func textViewSetup() {
+        noteBodyTextView.layer.borderWidth = 1
+        noteBodyTextView.layer.borderColor = UIColor.purpleThemeColor().cgColor
+    }
 }

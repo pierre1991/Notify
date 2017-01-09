@@ -34,6 +34,9 @@ class CreateNoteViewController: UIViewController {
         
         setupCollectionView()
 
+        textFieldSetup()
+        textViewSetup()
+        
         getAllUsers { (users) in
             if let users = users {
                 self.allUsers = users.filter({$0.identifier != UserController.sharedController.currentUser.identifier})
@@ -66,15 +69,23 @@ class CreateNoteViewController: UIViewController {
     
     
     @IBAction func createNoteButtonTapped(_ sender: Any) {
-        guard let title = noteTitleTextField.text, let text = noteBodyTextView.text else {return}
+        guard let title = noteTitleTextField.text, let text = noteBodyTextView.text else { return }
         
-        NoteController.createNote(title: title, text: text, identifier: UserController.sharedController.currentUser.identifier!, users: selectedUsersForNote) { (success, note) in
-            if note != nil {
-                _ = navigationController?.popToRootViewController(animated: true)
-                self.selectedUsersForNote = (note?.users)!
-            } else {
-            	print("couldn't create note")
-        	}
+        if selectedUsersForNote.isEmpty {
+            let alertController = UIAlertController(title: "", message: "Don't forget to add users to your note", preferredStyle: .alert)
+            
+            alertController.addAction(UIAlertAction(title: "gotcha", style: .default, handler: nil))
+            
+            present(alertController, animated: true, completion: nil)
+        } else {
+            NoteController.createNote(title: title, text: text, identifier: UserController.sharedController.currentUser.identifier!, users: selectedUsersForNote) { (success, note) in
+                if note != nil {
+                    _ = navigationController?.popToRootViewController(animated: true)
+                    self.selectedUsersForNote = (note?.users)!
+                } else {
+                    print("couldn't create note")
+                }
+            }
         }
     }
     
@@ -175,6 +186,23 @@ extension CreateNoteViewController: UITextFieldDelegate, UITextViewDelegate {
         noteTitleTextField.resignFirstResponder()
         
         return true
+    }
+    
+}
+
+
+//MARK: View Setup
+
+extension CreateNoteViewController {
+    
+    func textFieldSetup() {
+        noteTitleTextField.layer.borderWidth = 1
+        noteTitleTextField.layer.borderColor = UIColor.purpleThemeColor().cgColor
+    }
+    
+    func textViewSetup() {
+        noteBodyTextView.layer.borderWidth = 1
+        noteBodyTextView.layer.borderColor = UIColor.purpleThemeColor().cgColor
     }
     
 }
