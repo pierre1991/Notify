@@ -24,7 +24,6 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     @IBOutlet weak var logoutButton: UIButton!
     
     
-    
     //MARK: View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,6 +45,12 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         }
     }
 
+    
+    //MARK: Status Bar
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     
     //MARK: IBActions
     @IBAction func editPictureButtonTapped(_ sender: Any) {
@@ -85,7 +90,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
             alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: { (action) in
-                self.imagePicker.sourceType = .photoLibrary
+                self.imagePicker.sourceType = .camera
                 
                 self.present(self.imagePicker, animated: true, completion: nil)
             }))
@@ -104,6 +109,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         profielImage.image = originalImage
         
         dismiss(animated: true, completion: nil)
+        
+        //TODO: Save picture?
+        
     }
     
     
