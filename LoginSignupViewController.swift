@@ -69,7 +69,7 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
         if signUpButton.currentTitle == "Sign up!" {
             if let profileImage = profileImage {
                 ImageController.uploadImage(image: profileImage, completion: { (identifier) in
-                    guard let identifier = identifier else {return}
+                    guard let identifier = identifier else { return }
                     
                     UserController.createUser(email: email, password: password, imageEndpoint: identifier, completion: { (success, user) in
                         if success, let _ = user {
