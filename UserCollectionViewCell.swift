@@ -10,7 +10,6 @@ import UIKit
 
 class UserCollectionViewCell: UICollectionViewCell {
     
-    
     //MARK: IBOutlets
     @IBOutlet weak var userProfileImage: CircularImageView!
     
@@ -25,3 +24,4 @@ class UserCollectionViewCell: UICollectionViewCell {
     }
     
 }
+

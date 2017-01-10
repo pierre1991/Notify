@@ -10,11 +10,11 @@ import UIKit
 
 class NoteTableViewCell: UITableViewCell {
 
-    
     //MARK: IBOulets
     @IBOutlet weak var noteTitleLabel: UILabel!
     @IBOutlet weak var noteBodyLabel: UILabel!
     
+    @IBOutlet weak var collectionView: UICollectionView!
     
     
     override func awakeFromNib() {
@@ -33,3 +33,19 @@ class NoteTableViewCell: UITableViewCell {
 
 }
 
+extension NoteTableViewCell {
+    
+    func setCollectionViewDataSourceDelegate<D: UICollectionViewDataSource & UICollectionViewDelegate>(_ dataSourceDelegate: D, forRow row: Int) {
+        
+        collectionView.delegate = dataSourceDelegate
+        collectionView.dataSource = dataSourceDelegate
+        collectionView.tag = row
+        collectionView.setContentOffset(collectionView.contentOffset, animated:false) // Stops collection view if it was scrolling.
+        collectionView.reloadData()
+    }
+    
+    var collectionViewOffset: CGFloat {
+        get { return collectionView.contentOffset.x }
+        set { collectionView.contentOffset.x = newValue }
+    }
+}

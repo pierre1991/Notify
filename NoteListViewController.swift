@@ -14,6 +14,7 @@ class NoteListViewController: UIViewController {
     //MARK: Properties
     var notes: [Note] = []
     
+    var storedOffsets = [Int: CGFloat]()
     
     //MARK: IBOutlets
     @IBOutlet weak var tableView: UITableView!
@@ -91,5 +92,35 @@ extension NoteListViewController: UITableViewDelegate, UITableViewDataSource {
         
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard let tableViewCell = cell as? NoteTableViewCell else { return }
+        
+        tableViewCell.setCollectionViewDataSourceDelegate(self, forRow: indexPath.row)
+        tableViewCell.collectionViewOffset = storedOffsets[indexPath.row] ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard let tableViewCell = cell as? NoteTableViewCell else { return }
+
+        storedOffsets[indexPath.row] = tableViewCell.collectionViewOffset
+    }
+    
+}
+
+
+extension NoteListViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return notes.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "userProfileImage", for: indexPath) as! UserCollectionViewCell
+        
+        return cell
+    }
+    
+    
     
 }
