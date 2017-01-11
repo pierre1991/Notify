@@ -12,7 +12,7 @@ import AVFoundation
 class LoginSignupViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
 
     
-    //MARK: Properties
+	//MARK: Properties
     var profileImage: UIImage?
     
     var keyboardHeight: CGFloat!
@@ -26,7 +26,6 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
     
     @IBOutlet weak var profileImageView: UIImageView!
     
-	@IBOutlet weak var signUpStackView: UIStackView!
     @IBOutlet weak var signUpEmailTextField: UITextField!
     @IBOutlet weak var signUpPasswordTextField: UITextField!
     
@@ -64,42 +63,53 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
     
     //MARK: IBActions
     @IBAction func signUpButtonTapped(_ sender: Any) {
-        guard let email = signUpEmailTextField.text, isValidEmail(email: email), let password = signUpPasswordTextField.text else { return }
-        
         if signUpButton.currentTitle == "Sign up!" {
-            if let profileImage = profileImage {
-                ImageController.uploadImage(image: profileImage, completion: { (identifier) in
-                    guard let identifier = identifier else { return }
-                    
-                    UserController.createUser(email: email, password: password, imageEndpoint: identifier, completion: { (success, user) in
-                        if success, let _ = user {
-                            self.signUpEmailTextField.resignFirstResponder()
-                            self.signUpPasswordTextField.resignFirstResponder()
-                            
-                            self.dismiss(animated: true, completion: nil)
-                        } else {
-                            self.presentMessageViewController(title: "Oops", message: "something went wrong")
-                        }
-                    })
-                })
-            } else {
-                presentMessageViewController(title: "OOOOOPS", message: "OOOOOPS")
+            guard let profileImage = profileImage, let email = signUpEmailTextField.text, isValidEmail(email: email), let password = signUpPasswordTextField.text else {
+                profileImageView.shake()
+                signUpEmailTextField.shake()
+                signUpPasswordTextField.shake()
+                
+                return
             }
+            
+            ImageController.uploadImage(image: profileImage, completion: { (identifier) in
+                guard let identifier = identifier else { return }
+                    
+                UserController.createUser(email: email, password: password, imageEndpoint: identifier, completion: { (success, user) in
+                    if success, let _ = user {
+                        self.signUpEmailTextField.resignFirstResponder()
+                        self.signUpPasswordTextField.resignFirstResponder()
+                        
+                        self.dismiss(animated: true, completion: nil)
+                    } else {
+                        self.presentMessageViewController(title: "Oops", message: "something went wrong")
+                    }
+                })
+            })
         } else if signUpButton.currentTitle == "Log in!" {
+            guard let email = signUpEmailTextField.text, isValidEmail(email: email), let password = signUpPasswordTextField.text else {
+                signUpEmailTextField.shake()
+                signUpPasswordTextField.shake()
+                
+                return
+            }
+            
             UserController.authenticateUser(email: email, password: password, completion: { (true, user) in
                 if true, (user != nil) {
                     self.dismiss(animated: true, completion: nil)
                 } else {
-                    self.presentMessageViewController(title: "Oops", message: "couldn't authenticate user")
+                    self.presentMessageViewController(title: "Something went wrong", message: "Please check your email and password and try again")
                 }
             })
         }
-        
     }
     
     
     @IBAction func accountActionButtonTapped(_ sender: Any) {
         if accountActionButton.currentTitle == "Log in!" {
+            signUpEmailTextField.text = ""
+            signUpPasswordTextField.text = ""
+            
 			signupStateShowing = false
             loginStateShowing = true
             
@@ -115,10 +125,14 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
                     self.signUpButton.alpha = 1
                 })
             })
+        } else if accountActionButton.currentTitle == "Sign up!" {
+            signUpEmailTextField.text = ""
+            signUpPasswordTextField.text = ""
             
-		} else if accountActionButton.currentTitle == "Sign up!" {
     		signupStateShowing = true
             loginStateShowing = false
+            
+            needAnAccountDescription()
             
             UIView.animate(withDuration: 0.6, animations: {
                 self.profileImageView.layer.transform = CATransform3DIdentity
@@ -131,8 +145,6 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
                 })
             })
             
-            needAnAccountDescription()
-            
             moveInSignupViews()
         }
     }
@@ -141,7 +153,7 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
 
     //MARK: Helper Functions
     func moveInSignupViews() {
-        UIView.animate(withDuration: 0.8, animations: {
+        UIView.animate(withDuration: 0.6, animations: {
             self.profileImageView.layer.transform = CATransform3DIdentity
             self.signUpEmailTextField.layer.transform = CATransform3DIdentity
             self.signUpPasswordTextField.layer.transform = CATransform3DIdentity
@@ -150,7 +162,7 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     func moveOutSignupViews() {
-        UIView.animate(withDuration: 0.8, animations: {
+        UIView.animate(withDuration: 0.6, animations: {
             self.profileImageView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, -self.view.frame.width, 0, 0)
             self.signUpEmailTextField.layer.transform = CATransform3DTranslate(CATransform3DIdentity, -self.view.frame.width, 0, 0)
             self.signUpPasswordTextField.layer.transform = CATransform3DTranslate(CATransform3DIdentity, -self.view.frame.width, 0, 0)
@@ -160,22 +172,32 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
 
     
     func alreadyHaveAccountDescription() {
-        UIView.animate(withDuration: 0.8, animations: {
-            self.accountActionLabel.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, +self.view.frame.height, 0)
+        UIView.animate(withDuration: 0.6, animations: {
+            self.accountActionLabel.alpha = 0
+            self.accountActionButton.alpha = 0
         }, completion: {(finish) in
             self.accountActionLabel.text = "Need an account?"
             self.accountActionButton.setTitle("Sign up!", for: .normal)
-            self.accountActionLabel.layer.transform = CATransform3DIdentity
+            
+            UIView.animate(withDuration: 0.6, animations: {
+                self.accountActionLabel.alpha = 1
+                self.accountActionButton.alpha = 1
+            })
         })
     }
     
     func needAnAccountDescription() {
-        UIView.animate(withDuration: 0.8, animations: {
-            self.accountActionLabel.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, +self.view.frame.height, 0)
+        UIView.animate(withDuration: 0.6, animations: {
+			self.accountActionLabel.alpha = 0
+            self.accountActionButton.alpha = 0
         }, completion: {(finish) in
             self.accountActionLabel.text = "Already have an account?"
             self.accountActionButton.setTitle("Log in!", for: .normal)
-            self.accountActionLabel.layer.transform = CATransform3DIdentity
+
+            UIView.animate(withDuration: 0.6, animations: {
+                self.accountActionLabel.alpha = 1
+                self.accountActionButton.alpha = 1
+            })
         })
     }
     
@@ -184,6 +206,7 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
     func presentMessageViewController(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "ok", style: .default, handler: nil))
+        
         present(alert, animated: true, completion: nil)
     }
     
