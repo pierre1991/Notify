@@ -12,7 +12,7 @@ import Firebase
 
 class ImageController {
     
-    static func uploadImage(image: UIImage, completion:(_ identifier: String?) -> Void) {
+	static func uploadImage(image: UIImage, completion:(_ identifier: String?) -> Void) {
         if let base64image = image.base64String {
             let base = FirebaseController.base.child("image").childByAutoId()
             
