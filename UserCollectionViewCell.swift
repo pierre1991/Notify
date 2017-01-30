@@ -15,7 +15,9 @@ class UserCollectionViewCell: UICollectionViewCell {
     
     
     //MARK: Builder Function
-    func updateUserImage(identifier: String) {
+    func updateUserImage(identifier: String?) {
+        guard let identifier = identifier else { return }
+        
         ImageController.imageForIdentifier(identifier: identifier, completion: {(image) -> Void in
             guard let image = image else {return}
             
