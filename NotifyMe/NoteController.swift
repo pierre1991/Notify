@@ -34,7 +34,6 @@ class NoteController {
     
     static let sharedController = NoteController()
     
-    
 	static func fetchNotesForUser(_ user: User, completion:@escaping (_ notes: [Note]?) -> Void) {
         var allNotes: [Note] = []
         let dispatchGroup = DispatchGroup()
@@ -82,7 +81,7 @@ class NoteController {
     static func notesFromIdentifier(identifier: String, completion: @escaping (_ note: Note?) -> Void) {
         FirebaseController.dataAtEndpoint(endpoint: "/notes/\(identifier)", completion: {(data) -> Void in
             if let data = data as? [String: AnyObject] {
-                let note = Note(json: data, identifier: identifier)
+                let note = Note(jsonValue: data, identifier: identifier)
                 
                 completion(note)
             } else {
@@ -111,9 +110,9 @@ class NoteController {
         })
     }
     
-    
+    //MARK: Create
     static func createNote(title: String, text: String, identifier: String, users: [User], completion: (_ success: Bool, _ note: Note?) -> Void) {
-        var note = Note(title: title, text: text, identifier: UserController.sharedController.currentUser.identifier!, users: users)
+        var note = Note(title: title, text: text, identifier: identifier, users: users)
         note.save()
         
         guard let noteId = note.identifier else {
@@ -121,30 +120,30 @@ class NoteController {
             return
         }
         
-        var user = UserController.sharedController.currentUser
-        user?.noteId.append(noteId)
-        user?.save()
+        var user = UserController.sharedController.currentUser!
+        user.noteId.insert(noteId, at: 0)
+        user.save()
         
         for var user in users {
-            user.noteId.append(noteId)
+            user.noteId.insert(noteId, at: 0)
             user.save()
         }
         
         completion(true, note)
     }
  
-    
+    //MARK: Order
     static func orderNotes(note: [Note]) -> [Note] {
         return note.sorted(by: {$0.0.identifier > $0.1.identifier})
     }
     
-    
+    //MARK: Save
     static func saveNote(note: Note) {
         var note = note
         note.save()
     }
     
-    
+    // MARK: Delete
     static func deleteNote(note: Note) {
         note.delete()
     }

@@ -34,6 +34,7 @@ class ImageController {
             }
         }
     }
+
 }
 
 extension UIImage {
