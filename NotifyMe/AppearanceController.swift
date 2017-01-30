@@ -16,6 +16,11 @@ class AppearanceController {
         UINavigationBar.appearance().isTranslucent = false
         UINavigationBar.appearance().barTintColor = .purpleThemeColor()
         UINavigationBar.appearance().tintColor = .white
+        
+        UINavigationBar.appearance().titleTextAttributes = [
+            NSForegroundColorAttributeName: UIColor.white,
+            NSFontAttributeName: UIFont(name: "Avenir-Medium", size: 26)!
+        ]
     }
     
 }
