@@ -25,6 +25,8 @@ class CircularImageView: UIImageView {
     func setupImage() {
         layer.cornerRadius = self.frame.width / 2
         layer.masksToBounds = true
+        
+        contentMode = .scaleAspectFill
     }
     
 }
