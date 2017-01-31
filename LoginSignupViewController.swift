@@ -11,7 +11,6 @@ import AVFoundation
 
 class LoginSignupViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
 
-    
 	//MARK: Properties
     var profileImage: UIImage?
     
@@ -26,10 +25,13 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
     
     @IBOutlet weak var profileImageView: UIImageView!
     
+    @IBOutlet weak var signUpUsernameTextField: UITextField!
     @IBOutlet weak var signUpEmailTextField: UITextField!
     @IBOutlet weak var signUpPasswordTextField: UITextField!
     
     @IBOutlet weak var signUpButton: UIButton!
+    
+    @IBOutlet weak var forgotPasswordButton: UIButton!
     
     @IBOutlet weak var accountActionLabel: UILabel!
     @IBOutlet weak var accountActionButton: UIButton!
@@ -38,13 +40,19 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
     //MARK: View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+                
+        navigationController?.navigationBar.isHidden = true
+
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardNotification), name: Notification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardNotification), name: Notification.Name.UIKeyboardWillHide, object: nil)
         
         //moveOutLoginViews()
         
         profileImageTap()
+        
+        setupForgotButton()
+        
+        forgotPasswordButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, +self.view.frame.width, 0, 0)
     }
     
     
@@ -56,6 +64,7 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
     
     //MARK: Touches
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        signUpUsernameTextField.resignFirstResponder()
         signUpEmailTextField.resignFirstResponder()
         signUpPasswordTextField.resignFirstResponder()
     }
@@ -64,8 +73,9 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
     //MARK: IBActions
     @IBAction func signUpButtonTapped(_ sender: Any) {
         if signUpButton.currentTitle == "Sign up!" {
-            guard let profileImage = profileImage, let email = signUpEmailTextField.text, isValidEmail(email: email), let password = signUpPasswordTextField.text else {
+            guard let profileImage = profileImage, let username = signUpUsernameTextField.text, let email = signUpEmailTextField.text, isValidEmail(email: email), let password = signUpPasswordTextField.text else {
                 profileImageView.shake()
+                signUpUsernameTextField.shake()
                 signUpEmailTextField.shake()
                 signUpPasswordTextField.shake()
                 
@@ -75,26 +85,27 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
             ImageController.uploadImage(image: profileImage, completion: { (identifier) in
                 guard let identifier = identifier else { return }
                     
-                UserController.createUser(email: email, password: password, imageEndpoint: identifier, completion: { (success, user) in
+                UserController.createUser(username: username,email: email, password: password, imageEndpoint: identifier, completion: { (success, user) in
                     if success, let _ = user {
+                        self.signUpUsernameTextField.resignFirstResponder()
                         self.signUpEmailTextField.resignFirstResponder()
                         self.signUpPasswordTextField.resignFirstResponder()
                         
-                        self.dismiss(animated: true, completion: nil)
+						UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
                     } else {
                         self.presentMessageViewController(title: "Oops", message: "something went wrong")
                     }
                 })
             })
         } else if signUpButton.currentTitle == "Log in!" {
-            guard let email = signUpEmailTextField.text, isValidEmail(email: email), let password = signUpPasswordTextField.text else {
+            guard let username = signUpUsernameTextField.text, let email = signUpEmailTextField.text, isValidEmail(email: email), let password = signUpPasswordTextField.text else {
                 signUpEmailTextField.shake()
                 signUpPasswordTextField.shake()
                 
                 return
             }
             
-            UserController.authenticateUser(email: email, password: password, completion: { (true, user) in
+            UserController.authenticateUser(username: username, email: email, password: password, completion: { (true, user) in
                 if true, (user != nil) {
                     self.dismiss(animated: true, completion: nil)
                 } else {
@@ -117,7 +128,9 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
             
             UIView.animate(withDuration: 0.6, animations: { 
                 self.profileImageView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, -self.view.frame.width, 0, 0)
+                self.signUpUsernameTextField.layer.transform = CATransform3DTranslate(CATransform3DIdentity, -self.view.frame.width, 0, 0)
                 self.signUpButton.alpha = 0
+                self.forgotPasswordButton.layer.transform = CATransform3DIdentity
 			}, completion: { (finished) in
     			self.signUpButton.setTitle("Log in!", for: .normal)
                 
@@ -136,7 +149,9 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
             
             UIView.animate(withDuration: 0.6, animations: {
                 self.profileImageView.layer.transform = CATransform3DIdentity
+                self.signUpUsernameTextField.layer.transform = CATransform3DIdentity
                 self.signUpButton.alpha = 0
+                self.forgotPasswordButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, +self.view.frame.width, 0, 0)
             }, completion: { (finished) in
                 self.signUpButton.setTitle("Sign up!", for: .normal)
                 
@@ -302,13 +317,23 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
                     self.notifyMeLabel.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -self.view.bounds.height, 0)
                 })
                 
+//                UIView.animate(withDuration: 0.8, animations: {
+//                    //self.notifyMeLabel.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -self.view.frame.height, 0)
+//                    self.profileImageView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -((UIScreen.main.bounds.height - self.keyboardHeight) / 4) - (self.profileImageView.frame.height / 2), 0)
+//                    self.signUpPasswordTextField.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -((UIScreen.main.bounds.height - self.keyboardHeight) / 3) - (self.profileImageView.frame.height / 2), 0)
+//                    self.signUpEmailTextField.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -((UIScreen.main.bounds.height - self.keyboardHeight) / 3) - (self.signUpEmailTextField.frame.height / 2), 0)
+//                    self.signUpPasswordTextField.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -((UIScreen.main.bounds.height - self.keyboardHeight) / 3) - (self.signUpPasswordTextField.frame.height / 2), 0)
+//                    self.signUpButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -((UIScreen.main.bounds.height - self.keyboardHeight) / 3) - (self.signUpButton.frame.height / 2), 0)
+//                })
+                
                 UIView.animate(withDuration: 0.8, animations: {
-                    //self.notifyMeLabel.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -self.view.frame.height, 0)
-                    self.profileImageView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -((UIScreen.main.bounds.height - self.keyboardHeight) / 4) - (self.profileImageView.frame.height / 2), 0)
-                    self.signUpEmailTextField.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -((UIScreen.main.bounds.height - self.keyboardHeight) / 3) - (self.signUpEmailTextField.frame.height / 2), 0)
-                    self.signUpPasswordTextField.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -((UIScreen.main.bounds.height - self.keyboardHeight) / 3) - (self.signUpPasswordTextField.frame.height / 2), 0)
-                    self.signUpButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -((UIScreen.main.bounds.height - self.keyboardHeight) / 3) - (self.signUpButton.frame.height / 2), 0)
+                    self.profileImageView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -(UIScreen.main.bounds.height - self.keyboardHeight) / 3, 0)
+                    self.signUpUsernameTextField.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -(UIScreen.main.bounds.height - self.keyboardHeight) / 3, 0)
+                    self.signUpEmailTextField.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -(UIScreen.main.bounds.height - self.keyboardHeight) / 3, 0)
+                    self.signUpPasswordTextField.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -(UIScreen.main.bounds.height - self.keyboardHeight) / 3, 0)
+                    self.signUpButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -(UIScreen.main.bounds.height - self.keyboardHeight) / 3, 0)
                 })
+                
             } else if loginStateShowing == true {
                 UIView.animate(withDuration: 0.8, animations: {
                     self.signUpEmailTextField.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -((UIScreen.main.bounds.height - self.keyboardHeight) / 3) - (self.signUpEmailTextField.frame.height / 2), 0)
@@ -323,6 +348,7 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
                 })
                 
                 self.profileImageView.layer.transform = CATransform3DIdentity
+                self.signUpUsernameTextField.layer.transform = CATransform3DIdentity
                 self.signUpEmailTextField.layer.transform = CATransform3DIdentity
                 self.signUpPasswordTextField.layer.transform = CATransform3DIdentity
                 self.signUpButton.layer.transform = CATransform3DIdentity
@@ -354,6 +380,18 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
         let emailTest = NSPredicate(format: "SELF MATCHES %@", emailRegEx)
         
         return emailTest.evaluate(with: email)
+    }
+    
+    //MARK: Forgot Password Button
+    func setupForgotButton() {
+        forgotPasswordButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, +self.view.frame.width, 0, 0)
+        
+        forgotPasswordButton.contentEdgeInsets = UIEdgeInsets(top: 6.0, left: 6.0, bottom: 6.0, right: 6.0)
+        
+        forgotPasswordButton.layer.borderWidth = 1.0
+        forgotPasswordButton.layer.borderColor = UIColor.white.cgColor
+        
+        forgotPasswordButton.layer.cornerRadius = 2.0
     }
  	
     
