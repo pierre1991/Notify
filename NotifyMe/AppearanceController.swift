@@ -16,6 +16,13 @@ class AppearanceController {
         UINavigationBar.appearance().isTranslucent = false
         UINavigationBar.appearance().barTintColor = .purpleThemeColor()
         UINavigationBar.appearance().tintColor = .white
+        UINavigationBar.appearance().shadowImage = UIImage()
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+        
+        //UITextField.appearance().keyboardAppearance = .dark
+        
+        //UITextView.appearance().keyboardAppearance = .dark
+        
         
         UINavigationBar.appearance().titleTextAttributes = [
             NSForegroundColorAttributeName: UIColor.white,
