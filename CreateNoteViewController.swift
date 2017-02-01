@@ -11,11 +11,13 @@ import Firebase
 
 class CreateNoteViewController: UIViewController {
     
-    
     //MARK: Properties
-    //let currentUser: User?
     var allUsers: [User]?
     var selectedUsersForNote: [User] = []
+    
+    
+    //MARK: Further UI
+    var collectionViewCellSize: CGFloat = 80.0
     
     
     //MARK: IBOutlets
@@ -31,23 +33,9 @@ class CreateNoteViewController: UIViewController {
 	//MARK: View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        setupCollectionView()
 
         textFieldSetup()
         textViewSetup()
-        
-        getAllUsers { (users) in
-            if let users = users {
-                self.allUsers = users.filter({$0.identifier != UserController.sharedController.currentUser.identifier})
-    
-                DispatchQueue.main.async {
-                    self.userCollectionView.reloadData()
-                }
-            } else {
-                self.allUsers = []
-            }
-        }
     }
     
     
@@ -66,7 +54,6 @@ class CreateNoteViewController: UIViewController {
             print("searching for friends")
         }
     }
-    
     
     @IBAction func createNoteButtonTapped(_ sender: Any) {
         guard let title = noteTitleTextField.text, let text = noteBodyTextView.text else { return }
@@ -97,6 +84,7 @@ class CreateNoteViewController: UIViewController {
         }
     }
     
+    
     //MARK: Report User Alert Controller
     func reportUserAlertController() {
         let reportActionSheet = UIAlertController(title: "Report", message: "", preferredStyle: .actionSheet)
@@ -120,61 +108,31 @@ class CreateNoteViewController: UIViewController {
 extension CreateNoteViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let allUsers = allUsers {
-            return allUsers.count
-        } else {
-            return 0
-        }
+        return selectedUsersForNote.count
     }
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "userProfileImage", for: indexPath) as! UserCollectionViewCell
         
-        if let users = allUsers {
-            let user = users[indexPath.item]
-            let userImage = user.imageEndpoint
-            
-            if let identifier = userImage {
-            	cell.updateUserImage(identifier: identifier)
-            }
+        let usersOfNote = selectedUsersForNote[indexPath.item]
+        let userImage = usersOfNote.imageEndpoint
+        
+        if let identifier = userImage {
+            cell.updateUserImage(identifier: identifier)
         }
         
     	return cell
     }
     
-    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath)
-        
-        cell?.contentView.backgroundColor = .purpleThemeColor()
-        
-        cell?.contentView.layer.cornerRadius = (cell?.frame.width)! / 2
-        cell?.contentView.clipsToBounds = true
-        
-        if let users = allUsers {
-            let user = users[indexPath.item]
-            self.selectedUsersForNote.append(user)
-            
-            rightBarButton.image = #imageLiteral(resourceName: "more_button")
-        }
+        noteTitleTextField.resignFirstResponder()
     }
     
-    
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath)
-        cell?.contentView.backgroundColor = nil
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        let sideInset = (collectionView.frame.size.width - collectionViewCellSize) / 2
         
-        self.selectedUsersForNote.removeLast()
-        
-        if self.selectedUsersForNote.isEmpty {
-        	rightBarButton.image = #imageLiteral(resourceName: "search_button")
-        }
-    }
-    
-    
-    func setupCollectionView() {
-        userCollectionView.allowsMultipleSelection = true
+        return UIEdgeInsets(top: 0, left: sideInset, bottom: 0, right: sideInset)
     }
     
 }
@@ -188,13 +146,6 @@ extension CreateNoteViewController: UITextFieldDelegate, UITextViewDelegate {
         return true
     }
     
-}
-
-
-//MARK: View Setup
-
-extension CreateNoteViewController {
-    
     func textFieldSetup() {
         noteTitleTextField.layer.borderWidth = 1
         noteTitleTextField.layer.borderColor = UIColor.purpleThemeColor().cgColor
@@ -206,3 +157,4 @@ extension CreateNoteViewController {
     }
     
 }
+
