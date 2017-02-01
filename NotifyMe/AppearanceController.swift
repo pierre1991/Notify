@@ -26,7 +26,7 @@ class AppearanceController {
         
         UINavigationBar.appearance().titleTextAttributes = [
             NSForegroundColorAttributeName: UIColor.white,
-            NSFontAttributeName: UIFont(name: "Avenir-Medium", size: 26)!
+            NSFontAttributeName: UIFont.systemFont(ofSize: 24.0, weight: UIFontWeightThin)
         ]
     }
     
