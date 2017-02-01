@@ -16,6 +16,7 @@ class NoteListViewController: UIViewController {
     
     var storedOffsets = [Int: CGFloat]()
     
+    
     //MARK: IBOutlets
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var noNotesView: UIView!
@@ -27,7 +28,13 @@ class NoteListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if FIRAuth.auth()?.currentUser == nil {
+            performSegue(withIdentifier: "toSignUpFlow", sender: self)
+        }
+        
     	tableView.tableFooterView = UIView()
+        
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -35,9 +42,7 @@ class NoteListViewController: UIViewController {
         
         if let currentUser = UserController.sharedController.currentUser {
         	loadNotesForUser(user: currentUser)
-        } else {
-            performSegue(withIdentifier: "toSignupLoginView", sender: self)
-		}
+        } 
     }
     
     
@@ -93,6 +98,15 @@ extension NoteListViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let note = notes[indexPath.row]
+            note.delete()
+            
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
+    }
+    
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard let tableViewCell = cell as? NoteTableViewCell else { return }
         
@@ -112,7 +126,7 @@ extension NoteListViewController: UITableViewDelegate, UITableViewDataSource {
 extension NoteListViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return notes.count
+        return notes[collectionView.tag].userIds.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
