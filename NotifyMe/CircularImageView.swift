@@ -30,3 +30,26 @@ class CircularImageView: UIImageView {
     }
     
 }
+
+class CircularView: UIView {
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        setupImage()
+    }
+    
+    override func awakeFromNib() {
+        setupImage()
+    }
+    
+    
+    func setupImage() {
+        layer.cornerRadius = self.frame.width / 2
+        layer.masksToBounds = true
+        
+        contentMode = .scaleAspectFill
+    }
+}
+
+
