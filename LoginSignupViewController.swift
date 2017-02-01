@@ -107,6 +107,9 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
             
             UserController.authenticateUser(username: username, email: email, password: password, completion: { (true, user) in
                 if true, (user != nil) {
+                    self.signUpEmailTextField.resignFirstResponder()
+                    self.signUpPasswordTextField.resignFirstResponder()
+                    
                     self.dismiss(animated: true, completion: nil)
                 } else {
                     self.presentMessageViewController(title: "Something went wrong", message: "Please check your email and password and try again")
