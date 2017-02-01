@@ -14,6 +14,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     //MARK: Properties
     let imagePicker = UIImagePickerController()
     
+    let currentUser = UserController.sharedController.currentUser
     
     
     //MARK: IBOutlets
@@ -58,12 +59,19 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     }
     
     @IBAction func logoutButtonTapped(_ sender: Any) {
-        try! FIRAuth.auth()?.signOut()
+        do {
+        	try FIRAuth.auth()?.signOut()
+        } catch {
+            print("ERROR: Unable to sign user out")
+        }
         
-        self.dismiss(animated: true, completion: nil)
+    	if let introViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "IntroViewController") as? IntroViewController {
+            present(introViewController, animated: true, completion: nil)
+        }
     }
 
     @IBAction func dismissButtonTapped(_ sender: Any) {
+        
         dismiss(animated: true, completion: nil)
     }
     
@@ -109,13 +117,6 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         profielImage.image = originalImage
         
         dismiss(animated: true, completion: nil)
-        
-        //TODO: Save picture?
-        
-    }
-    
-    
-    
-
+	}
 
 }
