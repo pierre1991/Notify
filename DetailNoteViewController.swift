@@ -15,6 +15,8 @@ class DetailNoteViewController: UIViewController {
     var note: Note?
     var usersOfNote: [User]?
     
+    let collectionViewCellSize: CGFloat = 66.0
+    
     
     //MARK: IBOutlets
     @IBOutlet weak var collectionView: UICollectionView!
@@ -32,6 +34,8 @@ class DetailNoteViewController: UIViewController {
         
         guard let note = note else {return}
         updateNote(note: note)
+        
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,7 +54,7 @@ class DetailNoteViewController: UIViewController {
     
     //MARK: IBActions
     @IBAction func saveButtonTapped(_ sender: Any) {
-    	note?.save()
+    	NoteController.saveNote(note: note!)
         
         _ = navigationController?.popViewController(animated: true)
     }
@@ -81,7 +85,7 @@ class DetailNoteViewController: UIViewController {
 
 }
 
-extension DetailNoteViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+extension DetailNoteViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let usersOfNote = usersOfNote else {return 0}
@@ -102,6 +106,14 @@ extension DetailNoteViewController: UICollectionViewDataSource, UICollectionView
         }
         
         return cell
+    }
+    
+    
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        let sideInset = (collectionView.frame.size.width - collectionViewCellSize) / 2
+        
+        return UIEdgeInsets(top: 0, left: sideInset, bottom: 0, right: sideInset)
     }
     
 }
@@ -130,4 +142,5 @@ extension DetailNoteViewController {
         noteBodyTextView.layer.borderWidth = 1
         noteBodyTextView.layer.borderColor = UIColor.purpleThemeColor().cgColor
     }
+    
 }
