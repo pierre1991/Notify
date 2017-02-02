@@ -12,25 +12,33 @@ import Firebase
 
 class ImageController {
     
-	static func uploadImage(image: UIImage, completion:(_ identifier: String?) -> Void) {
+	static func uploadImage(image: UIImage, completionHandler: (_ identifier: String?) -> Void) {
         if let base64image = image.base64String {
             let base = FirebaseController.base.child("image").childByAutoId()
             
             base.setValue(base64image)
             
-            completion(base.key)
+            completionHandler(base.key)
         } else {
-            completion(nil)
+            completionHandler(nil)
         }
     }
     
-    static func imageForIdentifier(identifier: String, completion:@escaping (_ image: UIImage?) -> Void) {
+    static func editImage(image: UIImage, imageEndpoint: String) {
+        if let base64image = image.base64String {
+            let base = FirebaseController.base.child("image")
+            
+            base.updateChildValues([imageEndpoint: base64image])
+        }
+    }
+    
+    static func imageForIdentifier(identifier: String, completionHandler: @escaping (_ image: UIImage?) -> Void) {
         FirebaseController.dataAtEndpoint(endpoint: "image/\(identifier)") { (data) -> Void in
             if let data = data as? String {
                 let image = UIImage(base64: data)
-                completion(image)
+                completionHandler(image)
             } else {
-                completion(nil)
+                completionHandler(nil)
             }
         }
     }
