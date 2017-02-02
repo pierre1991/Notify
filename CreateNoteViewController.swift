@@ -105,7 +105,7 @@ class CreateNoteViewController: UIViewController {
 
 }
 
-extension CreateNoteViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension CreateNoteViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return selectedUsersForNote.count
