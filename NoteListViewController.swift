@@ -12,6 +12,8 @@ import Firebase
 class NoteListViewController: UIViewController {
 
     //MARK: Properties
+    var userHasNotes: Bool = false
+    
     var notes: [Note] = []
     
     var storedOffsets = [Int: CGFloat]()
@@ -42,7 +44,7 @@ class NoteListViewController: UIViewController {
         
         if let currentUser = UserController.sharedController.currentUser {
         	loadNotesForUser(user: currentUser)
-        } 
+        }
     }
     
     
@@ -61,7 +63,7 @@ class NoteListViewController: UIViewController {
     
     //MARK: Builder Functions
     func loadNotesForUser(user: User) {
-        NoteController.fetchNotesForUser(user, completion: { (notes) -> Void in
+        NoteController.fetchNotesForUser(user, completionHandler: { (notes) -> Void in
             if let notes = notes {
                 self.notes = notes
                             
@@ -72,6 +74,14 @@ class NoteListViewController: UIViewController {
                 print("no notes to display")
             }
         })
+    }
+    
+}
+
+extension NoteListViewController: UserNotes {
+
+    func fetchNotes() -> [Note]? {
+        return notes
     }
     
 }
@@ -107,18 +117,20 @@ extension NoteListViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard let tableViewCell = cell as? NoteTableViewCell else { return }
-        
-        tableViewCell.setCollectionViewDataSourceDelegate(self, forRow: indexPath.row)
-        tableViewCell.collectionViewOffset = storedOffsets[indexPath.row] ?? 0
-    }
+//    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+//        guard let tableViewCell = cell as? NoteTableViewCell else { return }
+//        
+//        tableViewCell.setCollectionViewDataSourceDelegate(self, forRow: indexPath.row)
+//        //tableViewCell.collectionViewOffset = storedOffsets[indexPath.row] ?? 0
+//    }
     
+    /*
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard let tableViewCell = cell as? NoteTableViewCell else { return }
 
         storedOffsets[indexPath.row] = tableViewCell.collectionViewOffset
     }
+ 	*/
     
 }
 
@@ -126,15 +138,15 @@ extension NoteListViewController: UITableViewDelegate, UITableViewDataSource {
 extension NoteListViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return notes[collectionView.tag].userIds.count
+		return notes.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "userProfileImage", for: indexPath) as! UserCollectionViewCell
+        let note = notes[indexPath.item]
         
-        return cell
+        cell.updateUserImage(identifier: note.identifier)
+        
+		return cell
     }
-    
-    
-    
 }
