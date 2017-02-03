@@ -82,10 +82,10 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
                 return
             }
             
-            ImageController.uploadImage(image: profileImage, completion: { (identifier) in
+            ImageController.uploadImage(image: profileImage, completionHandler: { (identifier) in
                 guard let identifier = identifier else { return }
                     
-                UserController.createUser(username: username,email: email, password: password, imageEndpoint: identifier, completion: { (success, user) in
+                UserController.createUser(username: username,email: email, password: password, imageEndpoint: identifier, completionHandler: { (success, user) in
                     if success, let _ = user {
                         self.signUpUsernameTextField.resignFirstResponder()
                         self.signUpEmailTextField.resignFirstResponder()
@@ -105,7 +105,7 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
                 return
             }
             
-            UserController.authenticateUser(username: username, email: email, password: password, completion: { (true, user) in
+            UserController.authenticateUser(username: username, email: email, password: password, completionHandler: { (true, user) in
                 if true, (user != nil) {
                     self.signUpEmailTextField.resignFirstResponder()
                     self.signUpPasswordTextField.resignFirstResponder()
