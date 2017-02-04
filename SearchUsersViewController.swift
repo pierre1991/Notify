@@ -49,13 +49,12 @@ class SearchUsersViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: menuButton)
         
         menuButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, +self.view.frame.width, 0, 0)
-        
+
+        addUsersButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, +self.view.frame.height, 0)
+
         
         collectionView.allowsMultipleSelection = true
         
-        addUsersButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, +self.view.frame.height, 0)
-        
-    
         setupSearchController()
         
         
@@ -102,21 +101,19 @@ extension SearchUsersViewController: UISearchResultsUpdating, UISearchBarDelegat
         
         searchController.searchResultsUpdater = self
         
-        //searchController.searchBar.sizeToFit()
-        //searchPlaceholder.addSubview(searchController.searchBar)
-        
-        automaticallyAdjustsScrollViewInsets = false
+    	automaticallyAdjustsScrollViewInsets = false
         definesPresentationContext = true
         
+		searchController.searchBar.delegate = self
+        searchController.searchBar.keyboardAppearance = .dark
+        searchController.searchBar.barTintColor = .purpleThemeColor()
+        
+    	providesPresentationContextTransitionStyle = true
+        
+        //searchController.searchBar.sizeToFit()
+        //searchPlaceholder.addSubview(searchController.searchBar)
         //searchController.obscuresBackgroundDuringPresentation = true
         //searchController.dimsBackgroundDuringPresentation = true
-        
-        searchController.searchBar.delegate = self
-        searchController.searchBar.keyboardAppearance = .dark
-        
-        providesPresentationContextTransitionStyle = true
-        
-        searchController.searchBar.barTintColor = .purpleThemeColor()
     }
     
     func updateSearchResults(for searchController: UISearchController) {
@@ -154,29 +151,25 @@ extension SearchUsersViewController: UISearchResultsUpdating, UISearchBarDelegat
     	searchBar.showsCancelButton = true
     }
     
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        searchBar.showsCancelButton = true
-        
-        if !searchText.isEmpty {
-            filterContentForSearchText()
-            
-            collectionView.reloadData()
-        }
-    }
-    
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
-        //blurEffectView.removeFromSuperview()
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.text = ""
-        searchBar.showsCancelButton = true
+        searchBar.showsCancelButton = false
         searchBar.resignFirstResponder()
-        
-        collectionView.reloadData()
     }
+    
+//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//        searchBar.showsCancelButton = true
+//        
+//        if !searchText.isEmpty {
+//            filterContentForSearchText()
+//            
+//            collectionView.reloadData()
+//        }
+//    }
     
     func filterContentForSearchText() {
         filteredUsernames?.removeAll(keepingCapacity: false)
@@ -222,7 +215,7 @@ extension SearchUsersViewController: UICollectionViewDelegate, UICollectionViewD
         menuButton.layer.transform = CATransform3DIdentity
         
         let cell = collectionView.cellForItem(at: indexPath) as! SearchUserCollectionViewCell
-    	cell.backgroundHighlightView.backgroundColor = .purpleThemeColor()
+        cell.backgroundHighlightView.backgroundColor = .purpleThemeColor()
         
         
         if let users = allUsers {
@@ -322,15 +315,10 @@ extension SearchUsersViewController {
 //    }
 //}
 
-
-
-//// Target function for the tap gesture recognizer object created in the viewDidLoad function
 //func collectionViewBackgroundTapped() {
 //    // Dismiss the keyboard that's shown on the device's screen
 //    searchBar.resignFirstResponder()
 //}
-
-
 
 // This function allow the default tap gesture added to the collection view cell,
 // an the collection view's background to to work simultaneously
