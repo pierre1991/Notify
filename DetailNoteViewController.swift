@@ -15,7 +15,8 @@ class DetailNoteViewController: UIViewController {
     var note: Note?
     var usersOfNote: [User]?
     
-    let collectionViewCellSize: CGFloat = 66.0
+    let collectionViewCellSize: CGFloat = 100.0
+    
     
     
     //MARK: IBOutlets
@@ -54,7 +55,13 @@ class DetailNoteViewController: UIViewController {
     
     //MARK: IBActions
     @IBAction func saveButtonTapped(_ sender: Any) {
-    	NoteController.saveNote(note: note!)
+        guard let note = note else { return }
+        NoteController.saveNote(note: note)
+        
+        //let updateNote = Note(title: noteTitleTextField.text!, text: noteBodyTextView.text!, identifier: UserController.sharedController.currentUser.identifier!, users: usersOfNote!)
+        
+        //FirebaseController.base.child("/notes\(note.identifier)").updateChildValues(["title": noteTitleTextField.text ?? "", "text": noteBodyTextView.text ?? ""])
+       	//NoteController.saveNote(note: note)
         
         _ = navigationController?.popViewController(animated: true)
     }
@@ -108,14 +115,15 @@ extension DetailNoteViewController: UICollectionViewDataSource, UICollectionView
         return cell
     }
     
-    
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let sideInset = (collectionView.frame.size.width - collectionViewCellSize) / 2
+        let cellCount = CGFloat(collectionView.numberOfItems(inSection: section))
+        let totalCellContentWidth = cellCount * (collectionViewCellSize)
         
-        return UIEdgeInsets(top: 0, left: sideInset, bottom: 0, right: sideInset)
+        let sideInset = (collectionView.frame.size.width - totalCellContentWidth) / 2
+        
+        return UIEdgeInsets(top: 0, left: sideInset, bottom: 0, right: 0)
     }
-    
+
 }
 
 

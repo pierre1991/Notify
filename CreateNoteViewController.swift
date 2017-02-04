@@ -17,7 +17,7 @@ class CreateNoteViewController: UIViewController {
     
     
     //MARK: Further UI
-    var collectionViewCellSize: CGFloat = 80.0
+    var collectionViewCellSize: CGFloat = 100.0
     
     
     //MARK: IBOutlets
@@ -58,20 +58,11 @@ class CreateNoteViewController: UIViewController {
     @IBAction func createNoteButtonTapped(_ sender: Any) {
         guard let title = noteTitleTextField.text, let text = noteBodyTextView.text else { return }
         
-        if selectedUsersForNote.isEmpty {
-            let alertController = UIAlertController(title: "", message: "Don't forget to add users to your note", preferredStyle: .alert)
-            
-            alertController.addAction(UIAlertAction(title: "gotcha", style: .default, handler: nil))
-            
-            present(alertController, animated: true, completion: nil)
-        } else {
-            NoteController.createNote(title: title, text: text, identifier: UserController.sharedController.currentUser.identifier!, users: selectedUsersForNote) { (success, note) in
-                if note != nil {
-                    _ = navigationController?.popToRootViewController(animated: true)
-                    self.selectedUsersForNote = (note?.users)!
-                } else {
-                    print("couldn't create note")
-                }
+        NoteController.createNote(title: title, text: text, users: selectedUsersForNote) { (note) in
+            if note != nil {
+				_ = navigationController?.popToRootViewController(animated: true)
+            } else {
+				print("couldn't create note")
             }
         }
     }
@@ -130,7 +121,10 @@ extension CreateNoteViewController: UICollectionViewDelegate, UICollectionViewDa
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let sideInset = (collectionView.frame.size.width - collectionViewCellSize) / 2
+        let cellCount = CGFloat(collectionView.numberOfItems(inSection: section))
+        let totalCellWidth = cellCount * (collectionViewCellSize)
+        
+        let sideInset = (collectionView.frame.size.width - totalCellWidth) / 2
         
         return UIEdgeInsets(top: 0, left: sideInset, bottom: 0, right: sideInset)
     }
