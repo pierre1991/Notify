@@ -48,25 +48,23 @@ extension FirebaseType {
     
     // All objects conforming to FirebaseType will implement the following save function. This implementation checks for an identifier, if identifier is present the identifier is passed into childByAppendingPath. If not, a new ID is generated. The Firebase location is then updated with the jsonValue of the respective path
     mutating func save() {
-        var endpointBase: FIRDatabaseReference
+        var newEndpoint = FirebaseController.base.child(endpoint)
         
         if let identifier = identifier {
-            endpointBase = FirebaseController.base.child(endpoint).child(identifier)
+            newEndpoint = newEndpoint.child(identifier)
+            newEndpoint.updateChildValues(jsonValue)
         } else {
-            endpointBase = FirebaseController.base.child(endpoint).childByAutoId()
-            self.identifier = endpointBase.key
+            newEndpoint = newEndpoint.childByAutoId()
+            self.identifier = newEndpoint.key
+            newEndpoint.setValue(jsonValue)
         }
-        
-        endpointBase.updateChildValues(self.jsonValue)
     }
     
     // Uses endpoint and identifier to construct a path and remove jsonValue at the path's value
     func delete() {
-        if let identifier = self.identifier {
-            let endpointBase = FIRDatabase.database().reference().child(endpoint).child(identifier)
-            
-            endpointBase.removeValue()
-        }
+        guard let identifier = identifier else { return }
+        
+        FirebaseController.base.child(endpoint).child(identifier).removeValue()
     }
 }
 
