@@ -8,8 +8,22 @@
 
 import UIKit
 
-class NoteTableViewCell: UITableViewCell {
+protocol UserNotes: class {
+    func fetchNotes() -> [Note]?
+}
 
+class NoteTableViewCell: UITableViewCell {
+	
+    //MARK: Properties
+    //var userImageEndpoint: [String]?
+    
+    
+    var userIdentifirs: [User]?
+    var userNotes: [Note]?
+    
+    weak var fetchNotesDelegate: UserNotes?
+    
+    
     //MARK: IBOulets
     @IBOutlet weak var noteTitleLabel: UILabel!
     @IBOutlet weak var noteBodyLabel: UILabel!
@@ -17,9 +31,23 @@ class NoteTableViewCell: UITableViewCell {
     @IBOutlet weak var collectionView: UICollectionView!
     
     
+    //MARK: View Life Cycle
     override func awakeFromNib() {
         super.awakeFromNib()
-    }
+        
+        userNotes = fetchNotesDelegate?.fetchNotes()
+        
+        /*
+        for identifiers in userNotes! {
+            userIdentifirs?.append(contentsOf: identifiers.users)
+        }
+        
+        for imageEndpoint in userIdentifirs! {
+            userImageEndpoint?.append(imageEndpoint.imageEndpoint!)
+            
+        }
+ 		*/
+	}
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
@@ -33,14 +61,28 @@ class NoteTableViewCell: UITableViewCell {
 
 }
 
-extension NoteTableViewCell {
+extension NoteTableViewCell: UICollectionViewDataSource, UICollectionViewDelegate {
     
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+     	return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "userProfileImage", for: indexPath) as! UserCollectionViewCell
+        
+        cell.backgroundColor = .blue
+        
+    	return cell
+    }
+    
+    
+    /*
     func setCollectionViewDataSourceDelegate<D: UICollectionViewDataSource & UICollectionViewDelegate>(_ dataSourceDelegate: D, forRow row: Int) {
         
         collectionView.delegate = dataSourceDelegate
         collectionView.dataSource = dataSourceDelegate
         collectionView.tag = row
-        collectionView.setContentOffset(collectionView.contentOffset, animated:false) // Stops collection view if it was scrolling.
+        collectionView.setContentOffset(collectionView.contentOffset, animated:false)
         collectionView.reloadData()
     }
     
@@ -48,4 +90,5 @@ extension NoteTableViewCell {
         get { return collectionView.contentOffset.x }
         set { collectionView.contentOffset.x = newValue }
     }
+ 	*/
 }
