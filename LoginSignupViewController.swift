@@ -110,7 +110,7 @@ class LoginSignupViewController: UIViewController, UIImagePickerControllerDelega
                     self.signUpEmailTextField.resignFirstResponder()
                     self.signUpPasswordTextField.resignFirstResponder()
                     
-                    self.dismiss(animated: true, completion: nil)
+                    UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
                 } else {
                     self.presentMessageViewController(title: "Something went wrong", message: "Please check your email and password and try again")
                 }
