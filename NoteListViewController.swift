@@ -30,9 +30,13 @@ class NoteListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if FIRAuth.auth()?.currentUser == nil {
+        if UserController.sharedController.currentUser == nil {
             performSegue(withIdentifier: "toSignUpFlow", sender: self)
         }
+        
+//        if FIRAuth.auth()?.currentUser == nil {
+//            performSegue(withIdentifier: "toSignUpFlow", sender: self)
+//        }
         
     	tableView.tableFooterView = UIView()
         
