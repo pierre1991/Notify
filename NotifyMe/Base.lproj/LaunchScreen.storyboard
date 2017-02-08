@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -21,14 +22,21 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launch_icon" translatesAutoresizingMaskIntoConstraints="NO" id="z7A-Kh-9Rt">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launch_icon" translatesAutoresizingMaskIntoConstraints="NO" id="z7A-Kh-9Rt">
                                 <rect key="frame" x="91" y="242" width="139" height="85"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="z7A-Kh-9Rt" secondAttribute="height" multiplier="139:85" id="ScO-k8-Jzv"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.80783659200000002" green="0.5856781673" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="z7A-Kh-9Rt" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="242" id="4ve-Cv-1nn"/>
                             <constraint firstItem="z7A-Kh-9Rt" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="6Fa-uX-OjE"/>
                             <constraint firstItem="z7A-Kh-9Rt" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="CV0-Uz-xcU"/>
+                            <constraint firstAttribute="trailing" secondItem="z7A-Kh-9Rt" secondAttribute="trailing" constant="90" id="nVQ-VB-YHr"/>
+                            <constraint firstItem="z7A-Kh-9Rt" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" constant="91" id="oTn-7G-KDE"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="z7A-Kh-9Rt" secondAttribute="bottom" constant="241" id="tMR-SS-Tbr"/>
                         </constraints>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
