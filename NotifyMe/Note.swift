@@ -28,7 +28,8 @@ class Note: FirebaseType {
     }
     
     // Init
-    init(title: String, text: String, users: [User]) {
+    init(identifier: String? = nil, title: String, text: String, users: [User]) {
+        self.identifier = identifier
         self.title = title
         self.text = text
         self.users = users

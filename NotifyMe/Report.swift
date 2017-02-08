@@ -15,16 +15,17 @@ class Report {
     
     let reporterID: String
     let userID: String
+    
     var identifier: String?
     var endpoint: String {
         return "reports"
     }
-    
     var jsonValue: [String: AnyObject] {
         return [kReporterID: reporterID as AnyObject, kUserID: userID as AnyObject]
     }
     
-    init(reporterID: String, userID: String) {
+    init(identifier: String? = nil, reporterID: String, userID: String) {
+        self.identifier = identifier
         self.reporterID = reporterID
         self.userID = userID
     }

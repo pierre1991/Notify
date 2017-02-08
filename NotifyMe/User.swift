@@ -19,8 +19,8 @@ class User: FirebaseType {
     var username: String
     var email: String
     var imageEndpoint: String?
-    var notes: [Note] = []
-    var noteId: [String] = []
+    var notes: [Note]?
+    var noteId: [String]?
 //        didSet {
 //            if identifier == UserController.sharedController.currentUser.identifier {
 //                UserDefaults.standard.set(self.jsonValue, forKey: "userKey")
@@ -33,11 +33,18 @@ class User: FirebaseType {
     }
     
     var jsonValue: [String: AnyObject] {
-        return [kUsername: username as AnyObject, kEmail: email as AnyObject, kNoteId: noteId as AnyObject, kImageEndpoint: imageEndpoint as AnyObject]
+        var json: [String: AnyObject] = [kUsername: username as AnyObject, kEmail: email as AnyObject, kImageEndpoint: imageEndpoint as AnyObject]
+        
+        if let noteId = noteId {
+            json.updateValue(noteId as AnyObject, forKey: kNoteId)
+        }
+        
+        return json
     }
     
     //Init
-    init(username: String, email: String, imageEndpoint: String? = nil) {
+    init(identifier: String, username: String, email: String, imageEndpoint: String) {
+        self.identifier = identifier
         self.username = username
         self.email = email
         self.imageEndpoint = imageEndpoint
