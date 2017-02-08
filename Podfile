@@ -7,9 +7,9 @@ target 'NotifyMe' do
 
   # Pods for NotifyMe
 
-  	pod 'FBSDKCoreKit'
-  	pod 'FBSDKShareKit'
-  	pod 'FBSDKLoginKit'
+  pod 'FBSDKCoreKit'
+  pod 'FBSDKShareKit'
+  pod 'FBSDKLoginKit'
 
 	pod ‘Firebase/Core’
 	pod 'Firebase/Messaging'
