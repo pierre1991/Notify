@@ -115,14 +115,15 @@ class NoteController {
         var note = Note(title: title, text: text, users: users)
         note.save()
         
-        guard let noteID = note.identifier else { completionHandler(nil); return }
+        guard let noteId = note.identifier else { completionHandler(nil); return }
         
         var user = UserController.sharedController.currentUser
-        user?.noteId.append(noteID)
+        user?.noteId?.append(noteId)
+        //user?.noteId.append(noteID)
         user?.save()
         
         for var user in users {
-            user.noteId.append(noteID)
+            user.noteId?.append(noteId)
             user.save()
         }
         
