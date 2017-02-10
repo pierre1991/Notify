@@ -17,7 +17,7 @@ class UserController {
 
     var currentUser: User! {
         get {
-            guard let uid = FIRAuth.auth()?.currentUser?.uid, let userDictionary = UserDefaults.standard.value(forKey: kUser) as? [String:AnyObject] else {return nil}
+            guard let uid = FIRAuth.auth()?.currentUser?.uid, let userDictionary = UserDefaults.standard.value(forKey: kUser) as? [String:AnyObject] else { return nil }
             
             return User(jsonValue: userDictionary, identifier: uid)
         } set {
@@ -33,12 +33,12 @@ class UserController {
     
     
     // Create User
-    static func createUser(username: String, email: String, password: String, imageEndpoint: String? = nil, completionHandler: @escaping (_ success: Bool, _ user: User?) -> Void) {
+    static func createUser(username: String, email: String, password: String, imageEndpoint: String, completionHandler: @escaping (_ success: Bool, _ user: User?) -> Void) {
         FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user, error) -> Void in
             if error == nil {
                 guard let identifier = user?.uid else { return }
                 
-                var user = User(username: username, email: email, imageEndpoint: imageEndpoint, identifier: identifier)
+                var user = User(identifier: identifier, username: username, email: email, imageEndpoint: imageEndpoint)
                 user.save()
                 
                 authenticateUser(username: username,email: email, password: password, completionHandler: { (success, user) in
