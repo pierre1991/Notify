@@ -11,21 +11,11 @@ import UIKit
 class IntroPageViewController: UIPageViewController, UIPageViewControllerDelegate, UIPageViewControllerDataSource {
 
     //MARK: Properties
-
-    /*
-    private(set) lazy var pages: [UIViewController] = {
-       return [
-        
-        
-        ]
-    }()
- 	*/
-    
-    var pages = [UIViewController]()
+	var pages = [UIViewController]()
     
     weak var pageControlDelgate: IntroPageControlDelegate?
     
-    
+
     //MARK: View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -28,9 +28,6 @@ class IntroViewController: UIViewController {
     }
 
     @IBAction func signupButtonTapped(_ sender: Any) {
-//        if let signupViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LoginSignupViewController") as? LoginSignupViewController {
-//            present(signupViewController, animated: true, completion: nil)
-//        }
     }
 }
 
