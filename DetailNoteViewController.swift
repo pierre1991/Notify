@@ -18,7 +18,6 @@ class DetailNoteViewController: UIViewController {
     let collectionViewCellSize: CGFloat = 100.0
     
     
-    
     //MARK: IBOutlets
     @IBOutlet weak var collectionView: UICollectionView!
     
