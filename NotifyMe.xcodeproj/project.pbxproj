@@ -154,12 +154,9 @@
 		8F3895C71DCCEE2E00D952BA /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				8F4B561B1E3832990086BF6A /* IntroViewController.swift */,
-				8F4B56191E381B710086BF6A /* IntroPageViewController.swift */,
-				8F3895C51DCCEE0200D952BA /* LoginSignupViewController.swift */,
-				8F4B56171E37C7500086BF6A /* ResetPasswordViewController.swift */,
-				8FD9C8F01DD6D1B700043B01 /* ProfileViewController.swift */,
-				8F1AA3521DFF380600A9BA28 /* InviteFriendsViewController.swift */,
+				8F4E83341E4BDE0C00FE884E /* Introduction */,
+				8F4E83351E4BDE1D00FE884E /* Signup/Login */,
+				8F4E83361E4BDE2F00FE884E /* Profile */,
 				8F3895CA1DCD024C00D952BA /* NoteListViewController.swift */,
 				8F96DE6A1E4105640095E06A /* SearchUsersViewController.swift */,
 				8F3895D01DCD34B000D952BA /* CreateNoteViewController.swift */,
@@ -286,6 +283,33 @@
 				8F3895C81DCCFC3D00D952BA /* ImageUploader.swift */,
 			);
 			name = Controller;
+			sourceTree = "<group>";
+		};
+		8F4E83341E4BDE0C00FE884E /* Introduction */ = {
+			isa = PBXGroup;
+			children = (
+				8F4B561B1E3832990086BF6A /* IntroViewController.swift */,
+				8F4B56191E381B710086BF6A /* IntroPageViewController.swift */,
+			);
+			name = Introduction;
+			sourceTree = "<group>";
+		};
+		8F4E83351E4BDE1D00FE884E /* Signup/Login */ = {
+			isa = PBXGroup;
+			children = (
+				8F3895C51DCCEE0200D952BA /* LoginSignupViewController.swift */,
+				8F4B56171E37C7500086BF6A /* ResetPasswordViewController.swift */,
+			);
+			name = Signup/Login;
+			sourceTree = "<group>";
+		};
+		8F4E83361E4BDE2F00FE884E /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				8FD9C8F01DD6D1B700043B01 /* ProfileViewController.swift */,
+				8F1AA3521DFF380600A9BA28 /* InviteFriendsViewController.swift */,
+			);
+			name = Profile;
 			sourceTree = "<group>";
 		};
 		EFA1EEDD97E943B20D6751CF /* Pods */ = {
