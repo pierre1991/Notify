@@ -82,6 +82,10 @@ class ProfileViewController: UIViewController {
     
     @IBAction func savePictureButtonTapped(_ sender: Any) {
         saveEditedImage()
+        
+        UIView.animate(withDuration: 0.4) { 
+            self.savePictureButton.layer.transform = CATransform3DIdentity
+        }
     }
     
     
