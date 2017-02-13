@@ -16,6 +16,7 @@ class AppearanceController {
         UINavigationBar.appearance().isTranslucent = false
         UINavigationBar.appearance().barTintColor = .purpleThemeColor()
         UINavigationBar.appearance().tintColor = .white
+        
         UINavigationBar.appearance().shadowImage = UIImage()
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
         
